@@ -17,3 +17,11 @@ app.use(session({
     resave : false,
     saveUninitialized : false
 }))
+
+
+
+
+
+app.listen(PORT, ()=> {
+    console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
+})
