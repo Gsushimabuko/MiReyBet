@@ -96,7 +96,7 @@ app.get('/login', (req, res)=> {
     
 })
 
-app.get('/nostros', (req, res)=> {
+app.get('/nosotros', (req, res)=> {
         res.render('nosotros')
 })
 
