@@ -112,15 +112,22 @@ app.post('/login', async (req, res) => {
     const cuenta = await db.Cuenta.findOne({
             where : {
                 correo : correo,
-                pass : password
+                pass : password,
             }
         })
-    if (cuenta == null){
-        console.log("contraseña o usurio incorrecto")
-        res.redirect('/login')
+    if (cuenta != null){
+        
+        if (cuenta.estado==1){
+            req.session.username = cuenta.correo// guardando variable en sesion
+            res.redirect("/mi_cuenta")    
+        }
+        else{
+            console.log("Usuario desactivado. Comuniquese con el administrador")
+            res.redirect('/login?aut=2')
+        } 
     } else{
-        req.session.username = cuenta.correo// guardando variable en sesion
-        res.redirect("/mi_cuenta")
+        console.log("contraseña o usurio incorrecto")
+        res.redirect('/login?aut=1')
     }
         
 })
@@ -132,7 +139,7 @@ app.get('/mi_cuenta', async (req, res)=> {
 
     if (dif >= 3 * 60 * 60 * 1000) {
         req.session.destroy() // Destruyes la sesion
-        res.render('/login')
+        res.render('/login/0')
     }else {
         if (correo == "admin"){
             res.render('panel_control')    
