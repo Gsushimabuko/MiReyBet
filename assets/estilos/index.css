@@ -1,0 +1,6 @@
+.seleccion{
+    background-color: darkkhaki;
+}
+.seleccion:hover{
+    background-color: gold;
+}

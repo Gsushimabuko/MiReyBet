@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mireybet</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/assets/estilos/index.css">    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    </head>
+
+
+
+    <body class="container">
+        
+        <h2>MiRey BET</h2>
+            
+        <!-- FILTROS DE BÚSQUEDA-->
+        <div class="row mt-4"> 
+
+            
+            <!--<img  class="col-4" src="/assets/imagenes/filter.png" > -->
+            <button class="col-4" id="fecha"> Fecha </button>
+            <button class="col-4"> Categoría </button>
+
+           
+
+        </div>
+
+
+        <div class="row">  
+
+            <a href="/fecha" class="btn btn-warning col-4"> Fecha </a> 
+            <a class="btn btn-warning col-4"> Categoría </a> 
+            
+        </div>
+
+        <!-- Tabla Partidas-->
+        <div class="mt-4"> 
+
+            <h2 class="seleccion">
+                Prueba
+            </h2>
+
+            <table class="table">
+                <thead>
+
+
+                    <tr>
+                        <th>Código</th>
+                        <th>Fecha</th>
+                        <th>Local</th>
+                        <th>Empate</th>
+                        <th>Visita</th>
+
+                    </tr>
+                    
+                </thead>
+                
+                
+            
+                <tbody>
+
+                    <% datos.forEach((i) => { %>
+                            <tr id="<%= i.id %>">
+                                <td><%= i.id %></td>
+                                <td><%= i.fecha %></td>
+
+                                <td>
+                                    <div>
+                                        <%= i.equipo1 %>
+
+                                    </div>
+                                    <!--LOCAL-->
+                                    <div class="seleccion">
+                                        <button id="butlocal<%=i.id%>">
+                                            
+                                            <%= i.factor1 %>
+                                        </button>
+                                    </div>
+
+                                </td>
+
+                                <!-- EMPATE-->
+                                <td>
+                                    <div > X </div>
+                                    <div class="seleccion" id="empate">
+                                        
+                                        <button id="butempate<%=i.id%>">
+
+                                            <%= i.empate %>
+                                        </button>
+                                    </div>
+                                
+                                </td>
+
+
+                                <td>
+                                    <div>
+                                        <%= i.equipo2 %>
+
+                                    </div>
+                                    <!-- VISITA-->
+                                    <div class="seleccion" >
+                                        <button id="butvisita<%=i.id%>">
+                                            <%= i.factor2 %>
+
+                                        </button>
+                                    </div>
+                                </td>
+                             
+                            </tr>
+                        <% }) %>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+        <div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>
+                        Hoja de apuestas 
+                    </h5>
+                        
+                        
+                </div>
+                <div class="card-body">
+
+                    <div>
+                        <b class="mb-2">
+                            <label class="form-label">Selección </label>
+                        </b>
+
+                        <div id="datosseleccion">
+
+                            <div id="cartilla">
+    
+                            </div>
+                            
+                            <div id="multiplicador">
+    
+                            </div>
+
+                        </div>
+
+                        <button id="borrar"> Borrar Seleccion </button>
+
+                            
+
+                    </div>
+
+
+                    <!--Monto-->
+                    <div>
+                        <b class="mb-2">
+                            <label class="form-label">Monto </label>
+                        </b>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3">
+                            <input id="monto" class="form-control" type="text" placeholder="Ingrese monto">
+                        </div>
+                    </div>
+
+                    <!--Ganancia  posible -->
+
+                    <div>
+                        <b>
+                            Ganancia posible: 
+                        </b>
+
+                        <div >
+                            <input  id="total" name="total" class="form-control" type="text" value="">
+
+                        </div>
+                    </div>
+
+                    <!--Botón apostar-->
+                    <div>
+                        <button class="btn btn-primary" type="submit">Button</button>
+                        
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+           <!--FOOTER-->
+           <%- include('footer') -%> 
+    
+    <script  src="/assets/js/hardcode.js"></script>
+    </body>
+</html> 

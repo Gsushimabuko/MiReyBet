@@ -12,7 +12,7 @@ const { application } = require('express')
 
 
 //PUERTO
-const PORT = 5000
+const PORT = 8000
 //CREANDO APP
 const app = express()
 
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 //SETENADO TEMPLATES Y VIEWS
-app.use(express.static('assets'))
+app.use('/assets' , express.static('assets'))
 app.set('view engine', 'ejs') 
 
 
@@ -36,7 +36,7 @@ app.use(session({
 }))
 
 //  ----ENDPOITS---- !!!
-app.get("/", async (req, res) =>{
+app.get("/",  async (req, res) =>{
 
     const tablaClientes = await db.Cliente.findAll({
         order : [
@@ -46,9 +46,54 @@ app.get("/", async (req, res) =>{
 
     console.log(tablaClientes)
 
-    res.render('index')
+    res.render('main', { datos : tablaClientes })
 })
 
+app.get("/fecha", async (req,res) => {
+
+    const tablaClientes = await db.Cliente.findAll({
+
+        order : [
+            ['createdAt', 'ASC']
+        ]
+    })
+
+    res.render('fechafiltro', { datos : tablaClientes })
+
+})
+
+app.get("/hardcode" , (req,res) =>{
+
+    const partidos = [
+        {
+            id : '110',
+            fecha : '20/02/2021',
+            equipo1 : 'Manchester United',
+            factor1 : 1.1,
+            empate : 4.5,
+            equipo2 : 'Alianza Lima',
+            factor2 : 9.2
+        },
+        {
+            id : '111',
+            fecha : '18/02/2021',
+            equipo1 : 'Manchester United',
+            factor1 : 1.1,
+            empate : 4.5,
+            equipo2 : 'Villareal',
+            factor2 : 9.2
+        },
+    ]
+
+
+    
+
+
+
+
+    res.render('hardcode', { datos : partidos })
+
+} )
 
 
 
