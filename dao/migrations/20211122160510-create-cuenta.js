@@ -35,7 +35,7 @@ module.exports = {
       pep: {
         type: Sequelize.INTEGER
       },
-      rol: {
+      estado: {
         type: Sequelize.INTEGER
       },
       createdAt: {
