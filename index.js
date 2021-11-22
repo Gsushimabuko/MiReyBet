@@ -36,17 +36,8 @@ app.use(session({
 }))
 
 //  ----ENDPOITS---- !!!
-app.get("/",  async (req, res) =>{
-
-    const tablaClientes = await db.Cliente.findAll({
-        order : [
-            ['id', 'DESC']
-        ]
-    })
-
-    console.log(tablaClientes)
-
-    res.render('main', { datos : tablaClientes })
+app.get("/", (req, res) =>{
+    res.render('index')
 })
 
 app.get("/fecha", async (req,res) => {
@@ -103,6 +94,10 @@ app.get('/login', (req, res)=> {
         res.render('login')
     }
     
+})
+
+app.get('/nostros', (req, res)=> {
+        res.render('nosotros')
 })
 
 app.post('/login', async (req, res) => {
