@@ -4,6 +4,7 @@
 .seleccion:hover{
     background-color: gold;
 }
-.deseleccion{
-    background-color: red;
+
+#texto-nosotros{
+    text-align: justify;
 }
