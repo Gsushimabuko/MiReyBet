@@ -196,7 +196,7 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 app.get('/mi_cuenta/cerrar', async (req, res)=> {
         req.session.destroy() // Destruyes la sesion
-        res.render('index')
+        res.render('login')
 })
 
 app.get("/reglas", async (req,res) => {
@@ -329,6 +329,11 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
         await banner.save()
         res.redirect('/banner')
 })
+
+app.get("/advertencia", async (req,res) => {
+    res.render('advertencia')
+})
+
 
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
