@@ -4,10 +4,6 @@
 .seleccion:hover{
     background-color: gold;
 }
-#error{
-    color: red;
-    background-color: rgb(255, 215, 215);
-}
 
 #texto-nosotros{
     text-align: justify;

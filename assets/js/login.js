@@ -1,8 +1,8 @@
 const mensaje = (aut) =>{
     const bloque = document.getElementById("aviso")
-    const aviso = document.createElement("span")
-    aviso.setAttribute("class", "border border-danger rounded p-2") 
-    aviso.setAttribute("id","error") 
+    const aviso = document.createElement("div")
+    aviso.setAttribute("class", "alert alert-danger") 
+    aviso.setAttribute("role","alert") 
     if (aut == 1) {        
         aviso.innerText = "Contraseña o correo incorrecto"
         bloque.appendChild(aviso)
