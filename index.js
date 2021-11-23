@@ -243,9 +243,15 @@ app.get('/banner/modificar/:codigo', async (req, res) => {
 app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, res) => {
     const idBanner = req.body.id
     const nombre =req.body.nombre
-    const filepath = `/imagenes/banners/${req.file.filename}`
+    var filepath = ""
+    if (req.file == null){
+        filepath = req.body.urlAnterior
+    }
+    else{
+        filepath = `/imagenes/banners/${req.file.filename}`    
+    }
+    
     const estado = req.body.estado
-
     const banner= await db.Banner.findOne({
         where : {
             id : idBanner
@@ -257,7 +263,7 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
     banner.estado = estado
 
     //3. Guardo/Actualizo en la base de datos
-    await Banner.save()
+    await banner.save()
 
     res.redirect('/banner')
 

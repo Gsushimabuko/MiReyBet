@@ -12,6 +12,7 @@
         <h2>Nuevo Banner</h2>
         <form method="post" action="/banner/modificar/upload" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<%= banner.id %>" />    
+            <input type="hidden" name="urlAnterior" value="<%= banner.urlBanner %>" />    
             <div class ="mb-2">
                         <label class="form-label">Subir Banner:</label>
                         <input name="banner" type="file" class="form-control" />
