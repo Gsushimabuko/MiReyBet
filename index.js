@@ -146,6 +146,11 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 })
 
+app.get('/mi_cuenta/cerrar', async (req, res)=> {
+        req.session.destroy() // Destruyes la sesion
+        res.render('index')
+})
+
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
 })
