@@ -10,6 +10,8 @@ const session = require('express-session')
 const db = require('./dao/models')
 const { application } = require('express')
 
+//PARA SUBIR ARCHIVOS
+
 
 //PUERTO
 const PORT = 8000
@@ -165,6 +167,23 @@ app.get("/reglas", async (req,res) => {
 
 app.get("/TyC", async (req,res) => {
     res.render('TyC')
+})
+
+app.get('/banner/new', async (req, res) => {
+    res.sendFile(__dirname + "/views/banner_new.ejs")
+})
+
+app.post('/banner/new', async (req, res) => {
+    const nombre = req.body.nombre
+    const url = req.body.url
+
+    await db.Banner.create({
+        nombre : nombre,
+        urlBanner : url,
+        estado : 1
+    })
+
+    res.redirect('/banner')
 })
 
 app.listen(PORT, ()=> {
