@@ -4,3 +4,6 @@
 .seleccion:hover{
     background-color: gold;
 }
+.deseleccion{
+    background-color: red;
+}

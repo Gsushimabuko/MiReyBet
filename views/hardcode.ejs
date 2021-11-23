@@ -60,7 +60,7 @@
                 
                 
             
-                <tbody>
+                <tbody id="tabla">
 
                     <% datos.forEach((i) => { %>
                             <tr id="<%= i.id %>">
@@ -73,7 +73,7 @@
 
                                     </div>
                                     <!--LOCAL-->
-                                    <div class="seleccion">
+                                    <div class="">
                                         <button id="butlocal<%=i.id%>">
                                             
                                             <%= i.factor1 %>
@@ -85,7 +85,7 @@
                                 <!-- EMPATE-->
                                 <td>
                                     <div > X </div>
-                                    <div class="seleccion" id="empate">
+                                    <div class="" id="empate">
                                         
                                         <button id="butempate<%=i.id%>">
 
@@ -102,7 +102,7 @@
 
                                     </div>
                                     <!-- VISITA-->
-                                    <div class="seleccion" >
+                                    <div class="" >
                                         <button id="butvisita<%=i.id%>">
                                             <%= i.factor2 %>
 
@@ -150,7 +150,14 @@
 
                         </div>
 
-                        <button id="borrar"> Borrar Seleccion </button>
+
+                        <!-- Boton cerrar-->
+
+                        <div id="cerrar">
+                            
+                        </div>
+
+                        
 
                             
 
@@ -166,13 +173,13 @@
 
                     <div class="row">
                         <div class="col-3">
-                            <input id="monto" class="form-control" type="text" placeholder="Ingrese monto">
+                            <input id="monto" class="form-control" type="text"  value="0">
                         </div>
                     </div>
 
                     <!--Ganancia  posible -->
 
-                    <div>
+                    <div class="mt-3">
                         <b>
                             Ganancia posible: 
                         </b>
@@ -184,8 +191,8 @@
                     </div>
 
                     <!--Botón apostar-->
-                    <div>
-                        <button class="btn btn-primary" type="submit">Button</button>
+                    <div id="divinferior" class="mt-3">
+                        <button class="btn btn-primary" type="submit" id="apostar">APOSTAR</button>
                         
                     </div>
                 </div>
