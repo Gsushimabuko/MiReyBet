@@ -244,12 +244,13 @@ const confirmarApuesta = () => {
                 const montoFinal  = document.getElementById("monto").value
                 const gananciaFinal =  document.getElementById("total").value
                 
-                
-                
+                const datosfinales = []
+                datosfinales[0] = codigoFinal.value
+                datosfinales[1] = montoFinal
+                datosfinales[2] = gananciaFinal
+                datosfinales[3] = seleccionFinal
 
-        
-
-                console.log(codigoFinal.value,montoFinal,gananciaFinal,seleccionFinal)
+                console.log(datosfinales)
 
 
             }
