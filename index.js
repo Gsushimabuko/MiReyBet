@@ -11,7 +11,19 @@ const db = require('./dao/models')
 const { application } = require('express')
 
 //PARA SUBIR ARCHIVOS
+const multer = require('multer')
+const mimeTypes = require('mime-types')
 
+const storageBanner= multer.diskStorage({
+    destination: "assets/imagenes/banners/",
+    filename: function(req,file,cb){
+        cb("",Date.now()+ "." + mimeTypes.extension(file.mimetype))
+    }
+})
+
+const uploadBanner = multer({
+    storage: storageBanner
+})
 
 //PUERTO
 const PORT = 8000
@@ -171,19 +183,84 @@ app.get("/TyC", async (req,res) => {
 
 app.get('/banner/new', async (req, res) => {
     res.sendFile(__dirname + "/views/banner_new.ejs")
+    res.render('banner_new')
+    
 })
 
-app.post('/banner/new', async (req, res) => {
+app.get('/banner/new/upload/dr', async (req, res) => {
+    res.sendFile(__dirname + "/views/banner_new.ejs")
+})
+
+
+
+app.post('/banner/new/upload',uploadBanner.single("banner"), async (req, res) => {
+    const filepath = `/imagenes/banners/${req.file.filename}`
     const nombre = req.body.nombre
-    const url = req.body.url
 
     await db.Banner.create({
         nombre : nombre,
-        urlBanner : url,
-        estado : 1
+        urlBanner: filepath,
+        estado:1
     })
 
     res.redirect('/banner')
+})
+
+app.get('/banner', async (req, res)=> {
+    const banner = await db.Banner.findAll({
+            order : [
+                ['id', 'DESC']
+            ]
+        });
+        res.render('banner', {
+            banner : banner
+        })
+})
+
+app.get('/banner/eliminar/:codigo', async (req, res) => {
+    const idBanner = req.params.codigo
+    await db.Banner.destroy({
+        where : {
+            id : idBanner
+        }
+    })
+    res.redirect('/banner')
+})
+
+app.get('/banner/modificar/:codigo', async (req, res) => {
+    const idBanner = req.params.codigo
+    const banner = await db.Banner.findOne({
+        where : {
+            id : idBanner
+        }
+    })
+    res.render('banner_update', {
+        banner : banner
+    })
+})
+
+
+app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, res) => {
+    const idBanner = req.body.id
+    const nombre =req.body.nombre
+    const filepath = `/imagenes/banners/${req.file.filename}`
+    const estado = req.body.estado
+
+    const banner= await db.Banner.findOne({
+        where : {
+            id : idBanner
+        }
+    })
+    //2. Cambiar su propiedas / campos
+    banner.nombre = nombre
+    banner.urlBanner = filepath
+    banner.estado = estado
+
+    //3. Guardo/Actualizo en la base de datos
+    await Banner.save()
+
+    res.redirect('/banner')
+
 })
 
 app.listen(PORT, ()=> {
