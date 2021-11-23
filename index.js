@@ -151,6 +151,14 @@ app.get('/mi_cuenta/cerrar', async (req, res)=> {
         res.render('index')
 })
 
+app.get("/reglas", async (req,res) => {
+    res.render('reglas')
+})
+
+app.get("/TyC", async (req,res) => {
+    res.render('TyC')
+})
+
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
 })
