@@ -23,13 +23,30 @@ const obtenerFactores = () =>{
 
         butlocal.onclick = () =>{
             
+            if(butlocal.className == "seleccion"){
+                console.log("comprobando")
+                butlocal.setAttribute("class", "")
+            }else{
+                
+                butlocal.setAttribute("class", "seleccion")
+            }
+
             const factorlocal = butlocal.innerText
             crearCartilla(factorlocal,butlocal.id,i)
+            
             
             
         }
         
         butempate.onclick = () =>{
+
+            if(butempate.className == "seleccion"){
+                console.log("comprobando")
+                butempate.setAttribute("class", "")
+            }else{
+                
+                butempate.setAttribute("class", "seleccion")
+            }
             
             const factorempate = butempate.innerText
             crearCartilla(factorempate,butempate.id,i)
@@ -38,6 +55,13 @@ const obtenerFactores = () =>{
         
         butvisita.onclick = () =>{
             
+            if(butvisita.className == "seleccion"){
+                console.log("comprobando")
+                butvisita.setAttribute("class", "")
+            }else{
+                
+                butvisita.setAttribute("class", "seleccion")
+            }
             const factorvisita = butvisita.innerText
             crearCartilla(factorvisita,butvisita.id,i)
             
@@ -240,16 +264,26 @@ const confirmarApuesta = () => {
             botonFinalSi.onclick = () =>{
 
                 const codigoFinal = document.getElementById("codigoPartidaFinal")
-                const seleccionFinal = document.getElementById("nombreseleccion").innerText
-                const montoFinal  = document.getElementById("monto").value
-                const gananciaFinal =  document.getElementById("total").value
+                const seleccionFinal = document.getElementById("nombreseleccion")
+                const montoFinal  = document.getElementById("monto")
+                const gananciaFinal =  document.getElementById("total")
                 
                 const datosfinales = []
-                datosfinales[0] = codigoFinal.value
-                datosfinales[1] = montoFinal
-                datosfinales[2] = gananciaFinal
-                datosfinales[3] = seleccionFinal
+                datosfinales[0] = codigoFinal//.value
+                datosfinales[1] = montoFinal//.value
+                datosfinales[2] = gananciaFinal//.value
+                datosfinales[3] = seleccionFinal//.innerText
 
+                nuevoDiv.remove()
+                
+                const inputEquipo = document.getElementById("equipoelegido")
+                
+                //divEndpoint.appendChild(datosfinales[0])
+                //divEndpoint.appendChild(datosfinales[1])
+                //divEndpoint.appendChild(datosfinales[2])
+                inputEquipo.value = datosfinales[2].innerText
+                
+                location.reload()
                 console.log(datosfinales)
 
 

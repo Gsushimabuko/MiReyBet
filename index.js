@@ -76,15 +76,20 @@ app.get("/hardcode" , (req,res) =>{
         },
     ]
 
-
     
-
-
-
 
     res.render('hardcode', { datos : partidos })
 
 } )
+
+app.post("/hardcode" , (req,res) =>{
+
+    const div = req.body.equipoelegido
+
+    console.log("Equipo: ",div)
+
+
+})
 
 app.get('/login', (req, res)=> {
     if (req.session.username != undefined) {
