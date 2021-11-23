@@ -9,7 +9,11 @@ const session = require('express-session')
 //BASE DE DATOS
 const db = require('./dao/models')
 const { application } = require('express')
+//PARA ENCRIPTAR
+const bcrypt = require('bcrypt')
 
+//ELIMINAR ARCHIVOS
+const fs = require('fs')
 //PARA SUBIR ARCHIVOS
 const multer = require('multer')
 const mimeTypes = require('mime-types')
@@ -125,25 +129,47 @@ app.post('/login', async (req, res) => {
 
     const cuenta = await db.Cuenta.findOne({
             where : {
-                correo : correo,
-                pass : password,
+                correo : correo
             }
         })
+    
     if (cuenta != null){
-        
-        if (cuenta.estado==1){
+        //Usuario admin sin encriptacion
+        if(cuenta.correo == "admin" && cuenta.pass==password){
             req.session.username = cuenta.correo// guardando variable en sesion
-            res.redirect("/mi_cuenta")    
+            console.log("Ingreso de admin")
+            res.redirect("/mi_cuenta")         
+        }
+        //Usuario cliente sin encriptacion para pruebas
+        else if(cuenta.correo == "prueba" && cuenta.pass==password){
+            req.session.username = cuenta.correo// guardando variable en sesion
+            console.log("Ingreso de prueba")
+            res.redirect("/mi_cuenta")         
         }
         else{
-            console.log("Usuario desactivado. Comuniquese con el administrador")
-            res.redirect('/login?aut=2')
-        } 
-    } else{
-        console.log("contraseña o usurio incorrecto")
-        res.redirect('/login?aut=1')
+            bcrypt.compare(password,cuenta.pass,(err,res) => {
+                if(err){
+                    console.log("error")
+                    res.redirect('/login?aut=1')
+                }
+                if (res && cuenta.estado==0){
+                    console.log("Usuario desactivado. Comuniquese con el administrador")
+                    res.redirect('/login?aut=2')
+                }
+                if (res && cuenta.estado==1){
+                    req.session.username = cuenta.correo// guardando variable en sesion
+                    console.log("Ingreso a su cuenta")
+                    es.redirect("/mi_cuenta")    
+                }
+            })
+            console.log("contraseña o usuraio incorrecto")
+            res.redirect('/login?aut=1')
+        }
     }
-        
+    else{
+        console.log("contraseña o usuraio incorrecto")
+        res.redirect('/login?aut=1')
+    }  
 })
 
 app.get('/mi_cuenta', async (req, res)=> {
@@ -182,16 +208,15 @@ app.get("/TyC", async (req,res) => {
 })
 
 app.get('/banner/new', async (req, res) => {
-    res.sendFile(__dirname + "/views/banner_new.ejs")
-    res.render('banner_new')
+    if (req.session.username=="admin"){
+        res.sendFile(__dirname + "/views/banner_new.ejs")
+        res.render('banner_new')
+    }
+    else{
+        res.render('/advertencia')
+    }
     
 })
-
-app.get('/banner/new/upload/dr', async (req, res) => {
-    res.sendFile(__dirname + "/views/banner_new.ejs")
-})
-
-
 
 app.post('/banner/new/upload',uploadBanner.single("banner"), async (req, res) => {
     const filepath = `/imagenes/banners/${req.file.filename}`
@@ -207,66 +232,102 @@ app.post('/banner/new/upload',uploadBanner.single("banner"), async (req, res) =>
 })
 
 app.get('/banner', async (req, res)=> {
-    const banner = await db.Banner.findAll({
-            order : [
-                ['id', 'DESC']
-            ]
-        });
-        res.render('banner', {
-            banner : banner
-        })
+    if (req.session.username=="admin"){
+        const banner = await db.Banner.findAll({
+                order : [
+                    ['id', 'DESC']
+                ]
+            });
+            res.render('banner', {
+                banner : banner
+            })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
 })
 
+
+
 app.get('/banner/eliminar/:codigo', async (req, res) => {
-    const idBanner = req.params.codigo
-    await db.Banner.destroy({
-        where : {
-            id : idBanner
-        }
-    })
-    res.redirect('/banner')
+    if (req.session.username=="admin"){
+        const idBanner = req.params.codigo
+        const banner = await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+    
+        const path = __dirname +"/assets" + banner.urlBanner
+        
+        fs.unlink(path, (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
+    
+        await db.Banner.destroy({
+            where : {
+                id : idBanner
+            }
+        })
+    
+        res.redirect('/banner')
+    }
+    else{
+        res.redirect('/advertencia')
+    }
 })
 
 app.get('/banner/modificar/:codigo', async (req, res) => {
-    const idBanner = req.params.codigo
-    const banner = await db.Banner.findOne({
-        where : {
-            id : idBanner
-        }
-    })
-    res.render('banner_update', {
-        banner : banner
-    })
+    if (req.session.username=="admin"){
+        const idBanner = req.params.codigo
+        const banner = await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+        res.render('banner_update', {
+            banner : banner
+        })    
+    } else{
+        res.redirect('/advertencia')
+    } 
 })
 
 
 app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, res) => {
-    const idBanner = req.body.id
-    const nombre =req.body.nombre
-    var filepath = ""
-    if (req.file == null){
-        filepath = req.body.urlAnterior
-    }
-    else{
-        filepath = `/imagenes/banners/${req.file.filename}`    
-    }
-    
-    const estado = req.body.estado
-    const banner= await db.Banner.findOne({
-        where : {
-            id : idBanner
+        const idBanner = req.body.id
+        const nombre =req.body.nombre
+        var filepath = ""
+        if (req.file == null){
+            filepath = req.body.urlAnterior
         }
-    })
-    //2. Cambiar su propiedas / campos
-    banner.nombre = nombre
-    banner.urlBanner = filepath
-    banner.estado = estado
-
-    //3. Guardo/Actualizo en la base de datos
-    await banner.save()
-
-    res.redirect('/banner')
-
+        else{
+            filepath = `/imagenes/banners/${req.file.filename}`
+            
+            const path = __dirname +"/assets" + req.body.urlAnterior
+            
+            fs.unlink(path, (err) => {
+                if (err) {
+                    console.error(err)
+                    return
+                }
+            })
+        }
+        const estado = req.body.estado
+        const banner= await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+        banner.nombre = nombre
+        banner.urlBanner = filepath
+        banner.estado = estado
+    
+        await banner.save()
+        res.redirect('/banner')
 })
 
 app.listen(PORT, ()=> {
