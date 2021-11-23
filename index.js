@@ -132,9 +132,12 @@ app.get('/mi_cuenta', async (req, res)=> {
     const dif = timestampActual - req.session.lastLogin
     const correo = req.session.username
 
-    if (dif >= 3 * 60 * 60 * 1000) {
+    if (correo == null){
+        res.render('login')
+    }
+    else if (dif >= 3 * 60 * 60 * 1000) {
         req.session.destroy() // Destruyes la sesion
-        res.render('/login/0')
+        res.render('login')
     }else {
         if (correo == "admin"){
             res.render('panel_control')    
