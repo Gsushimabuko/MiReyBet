@@ -30,7 +30,7 @@ const uploadBanner = multer({
 })
 
 //PUERTO
-const PORT = 8000
+const PORT = process.env.PORT | 8000
 //CREANDO APP
 const app = express()
 
@@ -309,7 +309,6 @@ app.get('/juego/eliminar/:codigo', async (req, res) => {
     res.redirect('/juego')
 })
 
-
 app.get('/banner/new', async (req, res) => {
     if (req.session.username=="admin"){
         res.sendFile(__dirname + "/views/banner_new.ejs")
@@ -349,8 +348,6 @@ app.get('/banner', async (req, res)=> {
         res.redirect('/advertencia')
     }
 })
-
-
 
 app.get('/banner/eliminar/:codigo', async (req, res) => {
     if (req.session.username=="admin"){
@@ -399,7 +396,6 @@ app.get('/banner/modificar/:codigo', async (req, res) => {
     } 
 })
 
-
 app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, res) => {
         const idBanner = req.body.id
         const nombre = req.body.nombre
@@ -443,9 +439,6 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
 app.get("/advertencia", async (req,res) => {
     res.render('advertencia')
 })
-
-
-
 
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
