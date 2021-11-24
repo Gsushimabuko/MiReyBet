@@ -9,35 +9,26 @@
     </head>
     <body class="container">
 
-        <h2>Mantenimiento de Banners</h2>
-        <a class="btn btn-success" href="/banner/new">Nuevo Banner</a>
+        <h2>Mantenimiento de Juegos</h2>
+        <a class="btn btn-success" href="/juego/new">Nuevo Juego</a>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Imagen</th>
-                    <th>Activo</th>
+                    <th>Categoría</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <% banner.forEach( (banner) => { %>
+                <% juegos.forEach( (juego) => { %>
                     <tr>
-                        <td><%= banner.id %></td>
-                        <td><%= banner.nombre %></td>
-                        <td><img id="banner-lista" class="img-fluid img-thumbnail" src=
-                        <%= banner.urlBanner %>
-                        /></td>
-                        <td><% if(banner.estado == 1) { %>
-                            <%= "Sí"%>
-                            <% }else{ %>
-                            <%= "No"%>
-                            <%} %>
-                        </td>
+                        <td><%= juego.id %></td>
+                        <td><%= juego.nombre %></td>                    
+                        <td><%= juego.categoriaJuegoNombre %></td>
                         <td>
-                            <a href="/banner/modificar/<%= banner.id %>" >Editar</a>
-                            <a href="/banner/eliminar/<%= banner.id %>" >Eliminar</a>
+                            <a href="/juego/modificar/<%= juego.id %>" >Editar</a>
+                            <a href="/juego/eliminar/<%= juego.id %>" >Eliminar</a>
                         </td>
                     </tr>
                 <% }) %>

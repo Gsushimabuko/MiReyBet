@@ -207,13 +207,116 @@ app.get("/TyC", async (req,res) => {
     res.render('TyC')
 })
 
+app.get('/juego', async (req, res)=> {
+      
+        const juegos = await db.Juego.findAll({
+            order : [
+                ['id', 'DESC']
+            ]
+        });
+
+        let nuevaListaJuego = []
+        for (let juego of juegos) {
+            const categoriaJuego = await juego.getCategoriaJuego()
+            nuevaListaJuego.push({
+                id : juego.id,
+                nombre : juego.nombre,
+                categoriaJuegoNombre : categoriaJuego.nombre
+            })
+        }
+        console.log("lista", nuevaListaJuego)
+
+        res.render('juego', {
+            juegos : nuevaListaJuego
+        })
+
+})
+
+app.get('/juego/new', async (req, res) => {
+    if (req.session.username=="admin"){
+        const categoriaJuego = await db.CategoriaJuego.findAll()
+        res.render('juego_new', {
+            categoriaJuego : categoriaJuego
+        })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+    
+})
+
+app.post('/juego/new', async (req, res) => {
+    
+    const nombre = req.body.nombre
+    const categoriaId = req.body.juego_categoriaJuegoId
+
+    await db.Juego.create({
+        nombre : nombre,
+        categoriaJuegoId : categoriaId
+    })
+
+    res.redirect('/juego')
+})
+
+app.get('/juego/modificar/:codigo', async (req, res) => {
+    const idJuego = req.params.codigo
+
+    const juego = await db.Juego.findOne({
+        where : {
+            id : idJuego
+        }
+    })
+
+    const categoriaJuego = await db.CategoriaJuego.findAll()
+
+
+    res.render('juego_update', {
+        juego : juego,
+        categoriaJuego : categoriaJuego
+    })
+})
+
+app.post('/juego/modificar', async (req, res) => {
+    const idJuego= req.body.id
+    const nombre =req.body.nombre
+    const categoriaJuegoId = req.body.juegoCategoriaJuegoId
+
+    console.log(categoriaJuegoId)
+
+    const juego = await db.Juego.findOne({
+        where : {
+            id : idJuego
+        }
+    })
+    //2. Cambiar su propiedas / campos
+    juego.nombre = nombre
+    juego.categoriaJuegoId = categoriaJuegoId
+
+    //3. Guardo/Actualizo en la base de datos
+    await juego.save()
+
+    res.redirect('/juego')
+
+})
+
+app.get('/juego/eliminar/:codigo', async (req, res) => {
+    const idJuego = req.params.codigo
+    await db.Juego.destroy({
+        where : {
+            id : idJuego
+        }
+    })
+    res.redirect('/juego')
+})
+
+
 app.get('/banner/new', async (req, res) => {
     if (req.session.username=="admin"){
         res.sendFile(__dirname + "/views/banner_new.ejs")
         res.render('banner_new')
     }
     else{
-        res.render('/advertencia')
+        res.redirect('/advertencia')
     }
     
 })
@@ -307,7 +410,7 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
         }
 
         var filepath = ""
-        
+
         if (req.file == null){
             filepath = req.body.urlAnterior
         }
@@ -340,6 +443,8 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
 app.get("/advertencia", async (req,res) => {
     res.render('advertencia')
 })
+
+
 
 
 app.listen(PORT, ()=> {
