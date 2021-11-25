@@ -30,7 +30,7 @@ const uploadBanner = multer({
 })
 
 //PUERTO
-const PORT = process.env.PORT | 8000
+var PORT = process.env.PORT || 8000
 //CREANDO APP
 const app = express()
 
@@ -54,8 +54,15 @@ app.use(session({
 }))
 
 //  ----ENDPOITS---- !!!
-app.get("/", (req, res) =>{
-    res.render('index')
+app.get("/", async (req, res)  =>{
+    const banner = await db.Banner.findAll({
+        order : [
+            ['id', 'ASC']
+        ]
+    });
+    res.render('index', {
+        banner : banner
+    })
 })
 
 app.get("/fecha", async (req,res) => {
