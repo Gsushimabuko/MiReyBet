@@ -316,6 +316,68 @@ app.get('/juego/eliminar/:codigo', async (req, res) => {
     res.redirect('/juego')
 })
 
+app.get('/partida', async (req, res)=> {
+      
+    const partidas = await db.Partida.findAll({
+        order : [
+            ['id', 'DESC']
+        ]
+    });
+
+    let nuevaListaPartida = []
+    for (let partida of partidas) {
+        const nombreJuego = await partida.getJuego()
+        const estadosPartida = await partida.getEstadoPartida()
+        nuevaListaPartida.push({
+            id : partida.id,
+            juego : juego.nombre,
+            fecha : partida.fecha,
+            equipoA : partida.equipoA,
+            equipoB : partida.equipoB,
+            juegoNombre : nombreJuego.nombre,
+            estadoPartida : estadosPartida.nombre
+        })
+    }
+    console.log("lista", nuevaListaPartida)
+
+    res.render('partida', {
+        partidas : nuevaListaPartida
+    })
+
+})
+
+app.get('/partida/new', async (req, res) => {
+    if (req.session.username=="admin"){
+        const nombreJuego = await db.Juego.findAll()
+        const estadosPartida = await db.EstadoPartida.findAll()
+        res.render('partida_new', {
+            nombreJuego : nombreJuego,
+            estadosPartida : estadosPartida
+        })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+    
+})
+
+app.post('/partida/new', async (req, res) => {
+    
+    const juego = req.body.partida_juego
+    const partida_fecha = req.body.partida_fecha
+    const partida_duracion = req.body.partida_duracion
+    const partida_estado = req.body.partida_estado
+
+    await db.Juego.create({
+        juego : juego,
+        fecha : partida_fecha,
+        duracion : partida_duracion,
+        estado : partida_estado
+    })
+
+    res.redirect('/partida')
+})
+
 app.get('/banner/new', async (req, res) => {
     if (req.session.username=="admin"){
         res.sendFile(__dirname + "/views/banner_new.ejs")
@@ -442,6 +504,8 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
         await banner.save()
         res.redirect('/banner')
 })
+
+
 
 app.get("/advertencia", async (req,res) => {
     res.render('advertencia')
