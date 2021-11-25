@@ -14,8 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Partida.init({
+    juego: DataTypes.STRING,
     fecha: DataTypes.DATE,
     duracion: DataTypes.INTEGER,
+    estado: DataTypes.STRING,
     equipoA: DataTypes.STRING,
     equipoB: DataTypes.STRING,
     factorA: DataTypes.INTEGER,

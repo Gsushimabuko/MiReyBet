@@ -8,11 +8,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      juego: {
+        type: Sequelize.STRING
+      },
       fecha: {
         type: Sequelize.DATE
       },
       duracion: {
         type: Sequelize.INTEGER
+      },
+      estado: {
+        type: Sequelize.STRING
       },
       equipoA: {
         type: Sequelize.STRING
@@ -42,7 +48,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, Sequelize) => { 
     await queryInterface.dropTable('Partida');
   }
 };
