@@ -7,7 +7,7 @@ let vacio = false
 
 const inputTotal = document.getElementById("total")
 const longitud = document.getElementById("tabla").childElementCount
-const inicio = 110
+const inicio = 1
 
 
 
@@ -90,11 +90,11 @@ const crearCartilla = (factor,idBoton,idLinea) =>{
         
 
         //nombre del equipo Local
-        const nombreLocal = document.getElementById(idLinea).children[2].children[0].innerText
+        const nombreLocal = document.getElementById(idLinea).children[3].children[0].innerText
         
         
         //nombre visita
-        const nombreVisita = document.getElementById(idLinea).children[4].children[0].innerText
+        const nombreVisita = document.getElementById(idLinea).children[5].children[0].innerText
         
 
         console.log("PARTIDO: ", nombreLocal, " vs ", nombreVisita)
@@ -317,6 +317,7 @@ const confirmarApuesta = () => {
     }
 
 }
+
 
 
 

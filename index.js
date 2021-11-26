@@ -54,6 +54,7 @@ app.use(session({
 }))
 
 //  ----ENDPOITS---- !!!
+
 app.get("/", async (req, res)  =>{
     const banner = await db.Banner.findAll({
         order : [
@@ -65,51 +66,57 @@ app.get("/", async (req, res)  =>{
     })
 })
 
-app.get("/fecha", async (req,res) => {
+app.get("/partidos/fecha", async (req,res) => {
 
-    const tablaClientes = await db.Cliente.findAll({
+    const tablaPartidos = await db.Partida.findAll({
 
         order : [
-            ['createdAt', 'DESC']
+            ['fecha', 'ASC']
         ]
+        /*
+        where: {
+            fecha: {
+              $gte: moment().add(7, 'days').toDate()
+            }
+          }
+   */       
     })
 
 
 
-    res.render('fechafiltro', { datos : tablaClientes })
+    res.render('fecha_partidos', { datos : tablaPartidos})
 
 })
 
-app.get("/hardcode" , (req,res) =>{
+app.get("/pendiente" , async (req,res) =>{
 
-    const partidos = [
-        {
-            id : '110',
-            fecha : '20/02/2021',
-            equipo1 : 'Manchester United',
-            factor1 : 1.1,
-            empate : 4.5,
-            equipo2 : 'Alianza Lima',
-            factor2 : 9.2
-        },
-        {
-            id : '111',
-            fecha : '18/02/2021',
-            equipo1 : 'Manchester United',
-            factor1 : 1.1,
-            empate : 4.5,
-            equipo2 : 'Villareal',
-            factor2 : 9.2
-        },
-    ]
+    const tablaPartidos = await db.Partida.findAll({
+
+        where : {
+        estado : 'pendiente'
+        }
+    })
+
+    res.render('pendiente', {datos : tablaPartidos})
+
+})
+    
+app.get("/partidos" , async (req,res) =>{
+
+    const tablaPartidos = await db.Partida.findAll({
+
+        order : [
+            ['fecha', 'DESC']
+        ]
+    })
 
     
 
-    res.render('hardcode', { datos : partidos })
+    res.render('hardcode', { datos : tablaPartidos })
 
 } )
 
-app.post("/hardcode" , (req,res) =>{
+app.post("/partidos" , (req,res) =>{
 
     const codigo = req.body.codigoelegido
     const equipo = req.body.equipoelegido
@@ -118,7 +125,7 @@ app.post("/hardcode" , (req,res) =>{
 
     console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
 
-    res.redirect("/hardcode")
+    res.redirect("/partidos")
 
 
 })
