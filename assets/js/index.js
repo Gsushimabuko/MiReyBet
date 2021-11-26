@@ -28,7 +28,7 @@ let numImagen = 0 // global
 let imagenes = [] // global
 
 const cambiarImagenes = () => {
-    const img = document.querySelector("#banner")
+    const img = document.querySelector("#banner-index")
 
     if (imagenes.length == numImagen) {
         numImagen = 0;

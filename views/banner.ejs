@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mirey Bet</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="/estilos/index.css">   
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    </head>
+    <body class="container">
+        <%- include('menu_admin') %>
+        <h2>Mantenimiento de Banners</h2>
+        <a class="btn btn-success" href="/banner/new">Nuevo Banner</a>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Imagen</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% banner.forEach( (banner) => { %>
+                    <tr>
+                        <td><%= banner.id %></td>
+                        <td><%= banner.nombre %></td>
+                        <td><img id="banner-lista" class="img-fluid img-thumbnail" src=
+                        <%= banner.urlBanner %>
+                        /></td>
+                        <td><% if(banner.estado == 1) { %>
+                            <%= "Sí"%>
+                            <% }else{ %>
+                            <%= "No"%>
+                            <%} %>
+                        </td>
+                        <td>
+                            <a href="/banner/modificar/<%= banner.id %>" >Editar</a>
+                            <a href="/banner/eliminar/<%= banner.id %>" >Eliminar</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <%- include('footer') %>
+    </body>
+</html>
