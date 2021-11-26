@@ -27,11 +27,11 @@
                 <% partidas.forEach( (partida) => { %>
                     <tr>
                         <td><%= partida.id %></td>
-                        <td><%= partida.juegoNombre %></td>
+                        <td><%= partida.juego %></td>
                         <td><%= partida.fecha %></td>
                         <td><%= partida.equipoA %></td>  
                         <td><%= partida.equipoB %></td>
-                        <td><%= partida.estadoPartida %></td>                  
+                        <td><%= partida.estado %></td>                  
                         <td>
                             <a href="/partida/modificar/<%= partida.id %>" >Editar</a>
                             <a href="/partida/eliminar/<%= partida.id %>" >Eliminar</a>

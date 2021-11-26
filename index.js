@@ -364,22 +364,19 @@ app.get('/partida', async (req, res)=> {
       
     const partidas = await db.Partida.findAll({
         order : [
-            ['id', 'DESC']
+            ['fecha', 'ASC']
         ]
     });
 
     let nuevaListaPartida = []
     for (let partida of partidas) {
-        const nombreJuego = await partida.getJuego()
-        const estadosPartida = await partida.getEstadoPartida()
         nuevaListaPartida.push({
             id : partida.id,
-            juego : juego.nombre,
+            juego : partida.juego,
             fecha : partida.fecha,
             equipoA : partida.equipoA,
             equipoB : partida.equipoB,
-            juegoNombre : nombreJuego.nombre,
-            estadoPartida : estadosPartida.nombre
+            estado : partida.estado
         })
     }
     console.log("lista", nuevaListaPartida)
@@ -410,15 +407,29 @@ app.post('/partida/new', async (req, res) => {
     const juego = req.body.partida_juego
     const partida_fecha = req.body.partida_fecha
     const partida_duracion = req.body.partida_duracion
+    const partida_equipoA = req.body.partida_equipoA
+    const partida_equipoB = req.body.partida_equipoB
     const partida_estado = req.body.partida_estado
 
-    await db.Juego.create({
+    await db.Partida.create({
         juego : juego,
         fecha : partida_fecha,
         duracion : partida_duracion,
+        equipoA : partida_equipoA,
+        equipoB : partida_equipoB,
         estado : partida_estado
     })
 
+    res.redirect('/partida')
+})
+
+app.get('/partida/eliminar/:codigo', async (req, res) => {
+    const idPartida = req.params.codigo
+    await db.Partida.destroy({
+        where : {
+            id : idPartida
+        }
+    })
     res.redirect('/partida')
 })
 
