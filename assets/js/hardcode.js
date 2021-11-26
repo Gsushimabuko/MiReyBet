@@ -276,15 +276,30 @@ const confirmarApuesta = () => {
 
                 nuevoDiv.remove()
                 
-                const inputEquipo = document.getElementById("equipoelegido")
+                const formFinal = document.getElementById("formfinal")
                 
                 //divEndpoint.appendChild(datosfinales[0])
                 //divEndpoint.appendChild(datosfinales[1])
                 //divEndpoint.appendChild(datosfinales[2])
-                inputEquipo.value = datosfinales[2].innerText
+
+                const inputEquipo = document.getElementById("equipoelegido")
+                const inputCodigo = document.getElementById("codigoelegido")
+                const inputGanancia = document.getElementById("gananciaelegida")
+                const inputMonto = document.getElementById("montoelegido")
+
+              
+
+                inputCodigo.value = datosfinales[0].value
+                inputGanancia.value = datosfinales[2].value
+                inputMonto.value = datosfinales[1].value
+                inputEquipo.value = datosfinales[3].innerText
                 
-                location.reload()
+                
                 console.log(datosfinales)
+                
+                //PASANDO LOS DATOS AL FORM
+                formFinal.submit()
+
 
 
             }

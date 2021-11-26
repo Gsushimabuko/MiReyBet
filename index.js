@@ -45,9 +45,11 @@ app.get("/fecha", async (req,res) => {
     const tablaClientes = await db.Cliente.findAll({
 
         order : [
-            ['createdAt', 'ASC']
+            ['createdAt', 'DESC']
         ]
     })
+
+
 
     res.render('fechafiltro', { datos : tablaClientes })
 
@@ -84,12 +86,47 @@ app.get("/hardcode" , (req,res) =>{
 
 app.post("/hardcode" , (req,res) =>{
 
-    const div = req.body.equipoelegido
+    const codigo = req.body.codigoelegido
+    const equipo = req.body.equipoelegido
+    const monto = req.body.montoelegido
+    const ganancia = req.body.ganancia_elegida
 
-    console.log("Equipo: ",div)
+    console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
+
+    res.redirect("/hardcode")
 
 
 })
+
+app.get("/misapuestas", async (req,res) =>{
+
+    
+
+    const usuarioApuestas = [
+        {
+            codigo: 1,
+            id : '110',
+            seleccion: 'Manchester United',
+            monto: 20,
+            ganancia: 22,
+            estado : 1
+        },
+        {
+            codigo: 2,
+            id : '111',
+            seleccion: 'Villareal',
+            monto: 10,
+            ganancia: 90,
+            estado : 0
+        }
+    
+    ]
+
+    
+
+    res.render('misapuestas', {apuestas: usuarioApuestas})
+
+} )
 
 app.get('/login', (req, res)=> {
     if (req.session.username != undefined) {
