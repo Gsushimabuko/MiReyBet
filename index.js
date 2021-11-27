@@ -17,6 +17,7 @@ const fs = require('fs')
 //PARA SUBIR ARCHIVOS
 const multer = require('multer')
 const mimeTypes = require('mime-types')
+const partida = require('./dao/models/partida')
 
 const storageBanner= multer.diskStorage({
     destination: "assets/imagenes/banners/",
@@ -421,6 +422,54 @@ app.post('/partida/new', async (req, res) => {
     })
 
     res.redirect('/partida')
+})
+
+app.get('/partida/modificar/:codigo', async (req, res) => {
+    const idPartida = req.params.codigo
+
+    const partida = await db.Partida.findOne({
+        where : {
+            id : idPartida
+        }
+    })
+
+    const nombreJuego = await db.Juego.findAll()
+    const estadosPartida = await db.EstadoPartida.findAll()
+
+    res.render('partida_update', {
+        partida : partida,
+        nombreJuego : nombreJuego,
+        estadosPartida : estadosPartida
+    })
+})
+
+app.post('/partida/modificar', async (req, res) => {
+    const idPartida= req.body.partida_id
+    const juego =req.body.partida_juego
+    const fecha = req.body.partida_fecha
+    const equipoA = req.body.partida_equipoA
+    const equipoB = req.body.partida_equipoB
+    const estado =req.body.partida_estado
+
+    console.log(juego)
+
+    const partida = await db.Partida.findOne({
+        where : {
+            id : idPartida
+        }
+    })
+    //2. Cambiar su propiedas / campos
+    partida.juego = juego
+    partida.fecha = fecha
+    partida.equipoA = equipoA
+    partida.equipoB = equipoB
+    partida.estado = estado
+
+    //3. Guardo/Actualizo en la base de datos
+    await partida.save()
+
+    res.redirect('/partida')
+
 })
 
 app.get('/partida/eliminar/:codigo', async (req, res) => {
