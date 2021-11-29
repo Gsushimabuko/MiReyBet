@@ -18,7 +18,13 @@
                         <a class="nav-link active" href="/nosotros">Nosotros</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Inciar Sesión</a>
+                        <a class="nav-link" href="/login">
+                        <% if(usuario != null) { %>
+                            Mi Cuenta
+                        <% } else { %>    
+                            Inciar Sesión
+                        <% }  %> 
+                    </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/registro_1">Crear Cuenta</a>

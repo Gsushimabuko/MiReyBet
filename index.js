@@ -58,14 +58,15 @@ app.use(session({
 //  ----ENDPOITS---- !!!
 
 app.get("/", async (req, res)  =>{
-
+    const usuario = req.session.username
     const banner = await db.Banner.findAll({
         order : [
             ['id', 'ASC']
         ]
     });
     res.render('index', {
-        banner : banner
+        banner : banner,
+        usuario : usuario
     })
 })
 
@@ -193,17 +194,22 @@ app.get("/misapuestas", async (req,res) =>{
 } )
 
 app.get('/login', (req, res)=> {
+    const usuario = req.session.username
     if (req.session.username != undefined) {
         req.session.lastLogin = new Date().getTime()
         res.redirect('/mi_cuenta')
     }else {
-        res.render('login')
+        res.render('login',
+        {usuario: usuario}
+        )
     }
     
 })
 
 app.get('/nosotros', (req, res)=> {
-        res.render('nosotros')
+    const usuario = req.session.username
+        res.render('nosotros',
+        {usuario: usuario})
 })
 
 app.post('/login', async (req, res) => {
@@ -307,15 +313,18 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 app.get('/mi_cuenta/cerrar', async (req, res)=> {
         req.session.destroy() // Destruyes la sesion
-        res.render('login')
+        const usuario = req.session.username
+        res.render('login' ,{usuario : usuario})
 })
 
 app.get("/reglas", async (req,res) => {
-    res.render('reglas')
+    const usuario = req.session.username
+    res.render('reglas',{usuario : usuario})
 })
 
 app.get("/TyC", async (req,res) => {
-    res.render('TyC')
+    const usuario = req.session.username
+    res.render('TyC', {usuario : usuario})
 })
 
 app.get('/juego', async (req, res)=> {
