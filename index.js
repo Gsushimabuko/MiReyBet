@@ -74,9 +74,7 @@ app.get("/", async (req, res)  =>{
 app.get("/partidos/fecha", async (req,res) => {
 
     
-    const idApuesta = new Date().getTime()
-
-    console.log("ID", idApuesta)
+   
 
     const pasadoManana = new Date().getTime() + (86400000 * 2);
 
@@ -119,77 +117,135 @@ app.get("/pendiente" , async (req,res) =>{
 
 
 
-app.get("/partidos" , async (req,res) =>{
+app.get("/partidos/:categoria" , async (req,res) =>{
 
-
-    //console.log("CATEGORÍA ELEGIDA: ", categoria)
-   
-    const tablaPartidos = await db.Partida.findAll({
-
+    
+    
+    let tablaPartidos = await db.Partida.findAll({
+        
         order : [
             ['fecha', 'DESC']
         ]
         
     })
+    if(req.params.categoria != "all"){
+        
+ 
+        tablaPartidos = await db.Partida.findAll({
+            
+            order : [
+                ['fecha', 'DESC']
+            ],
+            where: {
+                juego : req.params.categoria
+            }
+            
+        })
+        
 
+    }
     
-
+    
+    
     const tablaCategorias = await db.CategoriaJuego.findAll({
-
+        
     })
-
+    
     res.render('hardcode',
     
     { datos : tablaPartidos, 
         categorias : tablaCategorias, //juegos : tablaJuegos
-     })
+    })
+    
+} )
 
-    } )
 
-    app.post("/partidos" , (req,res) =>{
+// /:codigo
+app.post("/partidos" , async (req,res) =>{
+
+    const idApuesta = new Date().getTime()
+
+    console.log("ID", idApuesta)
+
+    const pasadoManana = new Date().getTime() + (86400000 * 2);
+
     
-        const codigo = req.body.codigoelegido
-        const equipo = req.body.equipoelegido
-        const monto = req.body.montoelegido
-        const ganancia = req.body.ganancia_elegida
     
-        console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
+    let select =  req.body.categoria
+
+    if(select == undefined) {
+        select='all'
+    }
     
-        const categoriaElegida = req.body.categoria
+   
     
+    //OBTENER DNI
+    req.session.username = '76277680'
     
-        res.redirect("/partidos")
+    //Encontrar tabla usuarios
+    const usuarioActivo = await db.Cuenta.findOne({
+    
+        where : {
+           dni : req.session.username
+        }
+    
+    })
+
+    //Seleccionar el id del usuario activo
+    console.log("ID USUARIO: "+usuarioActivo.id)
+
+    const codigo = req.body.codigoelegido
+    const equipo = req.body.equipoelegido
+    const monto = req.body.montoelegido
+    const ganancia = req.body.ganancia_elegida
+    
+    console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
+
+    
+    await db.Apuesta3.create({
+        codigoPartida : codigo,
+        equipo : equipo,
+        monto: monto,
+        iduUsuario: usuarioActivo.id
+    })
+    
+    res.redirect("/partidos/"+select)
     
     })
 
 
 app.get("/misapuestas", async (req,res) =>{
 
-   
+    req.session.username = '76277680'
 
-    const usuarioApuestas = [
-        {
-            codigo: 1,
-            id : '110',
-            seleccion: 'Manchester United',
-            monto: 20,
-            ganancia: 22,
-            estado : 1
-        },
-        {
-            codigo: 2,
-            id : '111',
-            seleccion: 'Villareal',
-            monto: 10,
-            ganancia: 90,
-            estado : 0
+    //obtener usuario
+    const usuarioActivo = await db.Cuenta.findOne({
+    
+        where : {
+           dni : req.session.username
         }
     
-    ]
+    })
 
     
+    const idUsuarioActivo = usuarioActivo.id.toString()
+    
+    console.log("ID USUARIO: " + idUsuarioActivo)
+    
+    
+    const tablasApuestasUsuario = await db.Apuesta3.findAll({
+        where: {
+            iduUsuario : idUsuarioActivo
+        }
+    })
+    
+    const users = await sequelize.query("SELECT * FROM `Partida`", { type: QueryTypes.SELECT });
 
-    res.render('misapuestas', {apuestas: usuarioApuestas})
+    console.log(users)
+    
+    
+
+    res.render('misapuestas', {apuestasUsuario: tablasApuestasUsuario})
 
 } )
 
