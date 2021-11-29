@@ -21,7 +21,7 @@ module.exports = {
     ]);
 
     await queryInterface.bulkInsert('CategoriaJuego', [
-      {nombre: 'Cate', createdAt: new Date(), updatedAt: new Date()},
+      {nombre: 'Cate1', createdAt: new Date(), updatedAt: new Date()},
       {nombre: 'Cate2', createdAt: new Date(), updatedAt: new Date()},
       {nombre: 'Cate3', createdAt: new Date(), updatedAt: new Date()}
     ]);
@@ -40,6 +40,7 @@ module.exports = {
       {correo: 'admin', pass: 'admin', estado: 2,createdAt: new Date(), updatedAt: new Date()},
       {correo: 'pruebav', pass: 'pruebav', estado: 2,createdAt: new Date(), updatedAt: new Date()},
       {correo: 'pruebas', pass: 'pruebas', estado: 1,createdAt: new Date(), updatedAt: new Date()},
+      {correo: 'pruebai', pass: 'pruebai', estado: 0,createdAt: new Date(), updatedAt: new Date()}
     ]);
   },
 
