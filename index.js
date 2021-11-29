@@ -102,7 +102,7 @@ app.get("/pendiente" , async (req,res) =>{
         const tablaPartidos = await db.Partida.findAll({
     
             where : {
-            estado : 'pendiente'
+            estado : '1'
             }
         })
     
