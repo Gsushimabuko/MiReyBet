@@ -516,11 +516,13 @@ app.get('/partida/modificar/:codigo', async (req, res) => {
     
         const nombreJuego = await db.Juego.findAll()
         const estadosPartida = await db.EstadoPartida.findAll()
+        const resultadoPartida = await db.Resultado.findAll()
     
         res.render('partida_update', {
             partida : partida,
             nombreJuego : nombreJuego,
-            estadosPartida : estadosPartida
+            estadosPartida : estadosPartida,
+            resultadoPartida : resultadoPartida
         })
     }else{
         res.redirect('/advertencia')
@@ -529,11 +531,12 @@ app.get('/partida/modificar/:codigo', async (req, res) => {
 
 app.post('/partida/modificar', async (req, res) => {
     const idPartida= req.body.partida_id
-    const juego =req.body.partida_juego
+    const juego = req.body.partida_juego
     const fecha = req.body.partida_fecha
     const equipoA = req.body.partida_equipoA
     const equipoB = req.body.partida_equipoB
-    const estado =req.body.partida_estado
+    const estado = req.body.partida_estado
+    const resultado = req.body.partida_resultado
 
     console.log(juego)
 
@@ -548,6 +551,7 @@ app.post('/partida/modificar', async (req, res) => {
     partida.equipoA = equipoA
     partida.equipoB = equipoB
     partida.estado = estado
+    partida.resultado = resultado
 
     //3. Guardo/Actualizo en la base de datos
     await partida.save()
