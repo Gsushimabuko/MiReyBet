@@ -578,8 +578,8 @@ app.get('/partida/eliminar/:codigo', async (req, res) => {
 
 app.get('/banner/new', async (req, res) => {
     if (req.session.username=="admin"){
-        res.sendFile(__dirname + "/views/banner_new.ejs")
         res.render('banner_new')
+        res.sendFile(__dirname + "/views/banner_new.ejs")
     }
     else{
         res.redirect('/advertencia')
@@ -810,20 +810,19 @@ app.post('/categoria/modificar', async (req, res) => {
     //3. Guardo/Actualizo en la base de datos
     await categoria.save()
 
-    res.redirect('/categoria')
-    
+    res.redirect('/categoria')  
 })
 
 
 
-app.get('/categoria/eliminar/:codigo', async (req, res) => {S
+app.get('/categoria/eliminar/:codigo', async (req, res) => {
     const idcategoria = req.params.codigo
-    await db.Partida.destroy({
+    await db.CategoriaJuego.destroy({
         where : {
-            id : idPartida
+            id : idcategoria
         }
     })
-    res.redirect('/partida')
+    res.redirect('/categoria')
 })
 
 
