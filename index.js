@@ -57,14 +57,13 @@ app.use(session({
 //  ----ENDPOITS---- !!!
 
 app.get("/", async (req, res)  =>{
-    const banner = await db.Banner.findAll({
-        order : [
-            ['id', 'ASC']
-        ]
-    });
-    res.render('index', {
-        banner : banner
-    })
+  //  const banner = await db.Banner.findAll({
+  //      order : [
+//['id', 'ASC']
+ //      ]
+    //});
+    res.render('index')
+  
 })
 
 app.get("/partidos/fecha", async (req,res) => {
@@ -608,6 +607,40 @@ app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, r
         await banner.save()
         res.redirect('/banner')
 })
+
+
+
+app.get("/registro_1", (req,res) => {
+    res.render('registro_1')
+})
+
+app.get("/registro_2", (req,res) => {
+    res.render('registro_2')
+})
+
+
+
+app.get("/registro_3", (req,res) => {
+    res.render('registro_3')
+})
+
+
+
+app.get("/registro_4", (req,res) => {
+    res.render('registro_4')
+})
+
+
+app.get("/registro_5", (req,res) => {
+    res.render('registro_5')
+})
+
+
+app.get("/registro_exitoso", (req,res) => {
+    res.render('registro_exitoso')
+})
+
+
 
 
 
