@@ -749,7 +749,7 @@ app.get("/categoria_update", async (req,res) => {
 })
 
 //eliminar  categoria
-pp.get('/categoria/eliminar/:codigo', async (req, res) => {
+app.get('/categoria/eliminar/:codigo', async (req, res) => {
     const idcategoria = req.params.codigos
     await db.Categoria.destroy({
         where : {
