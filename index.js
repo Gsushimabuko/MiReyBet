@@ -758,6 +758,44 @@ app.get("/categoria_new", async (req,res) => {
     res.render('categoria_new')
 })
 
+app.get('/categoria/new', async (req, res) => {
+    if (req.session.username=="admin"){
+        const nombrecategoria = await db.CategoriaJuego.findAll()
+      
+        res.render('categoria_new', {
+            nombrecategoria : nombrecategoria,
+        })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+    
+})
+
+app.post('/categoria/new', async (req, res) => {
+    
+    const juego = req.body.partida_juego
+    const partida_fecha = req.body.partida_fecha
+    const partida_duracion = req.body.partida_duracion
+    const partida_equipoA = req.body.partida_equipoA
+    const partida_equipoB = req.body.partida_equipoB
+    const partida_estado = req.body.partida_estado
+
+    await db.Partida.create({
+        juego : juego,
+        fecha : partida_fecha,
+        duracion : partida_duracion,
+        equipoA : partida_equipoA,
+        equipoB : partida_equipoB,
+        estado : partida_estado
+    })
+
+    res.redirect('/partida')
+})
+
+
+
+
 app.get("/categoria_update", async (req,res) => {
     res.render('categoria_update')
 })
