@@ -58,16 +58,7 @@ app.use(session({
 //  ----ENDPOITS---- !!!
 
 app.get("/", async (req, res)  =>{
-<<<<<<< HEAD
-  //  const banner = await db.Banner.findAll({
-  //      order : [
-//['id', 'ASC']
- //      ]
-    //});
-    res.render('index')
-  
-=======
-    
+
     const banner = await db.Banner.findAll({
         order : [
             ['id', 'ASC']
@@ -76,7 +67,6 @@ app.get("/", async (req, res)  =>{
     res.render('index', {
         banner : banner
     })
->>>>>>> 2019432d0d4466676227a7fade1b0b3e40b5825d
 })
 
 
