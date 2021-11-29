@@ -39,8 +39,7 @@ module.exports = {
     await queryInterface.bulkInsert('Cuenta', [
       {correo: 'admin', pass: 'admin', estado: 2,createdAt: new Date(), updatedAt: new Date()},
       {correo: 'pruebav', pass: 'pruebav', estado: 2,createdAt: new Date(), updatedAt: new Date()},
-      {correo: 'pruebas', pass: 'pruebas', estado: 1,createdAt: new Date(), updatedAt: new Date()},
-      {correo: 'pruebai', pass: 'pruebai', estado: 0,createdAt: new Date(), updatedAt: new Date()}
+      {correo: 'pruebas', pass: 'pruebas', estado: 1,createdAt: new Date(), updatedAt: new Date()}
     ]);
   },
 
