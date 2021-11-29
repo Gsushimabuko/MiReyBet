@@ -83,7 +83,7 @@ const crearCartilla = (factor,idBoton,idLinea) =>{
     //ACCEDIENDO AL DIV VACÍO DE LA CARTILLA
     const divCartilla = document.getElementById("cartilla")
     const divMultiplicador = document.getElementById("multiplicador")
-
+    
 
     if(cartilla == false) {
 
@@ -112,7 +112,7 @@ const crearCartilla = (factor,idBoton,idLinea) =>{
         
     
         //ACCEDIENDO AL NOMBRE DEL EQUIPO DEL FACTOR
-        const nombreEquipo = document.getElementById(idBoton).parentNode.previousElementSibling.innerText
+        const nombreEquipo = "\n"+ document.getElementById(idBoton).parentNode.previousElementSibling.innerText +  "\n"
         const nombreHTML = document.createElement("div")
         nombreHTML.setAttribute("id","nombreseleccion")
         nombreHTML.innerText = nombreEquipo

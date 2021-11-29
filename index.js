@@ -17,6 +17,7 @@ const fs = require('fs')
 //PARA SUBIR ARCHIVOS
 const multer = require('multer')
 const mimeTypes = require('mime-types')
+const { where } = require('sequelize/dist')
 
 const storageBanner= multer.diskStorage({
     destination: "assets/imagenes/banners/",
@@ -56,6 +57,7 @@ app.use(session({
 //  ----ENDPOITS---- !!!
 
 app.get("/", async (req, res)  =>{
+    
     const banner = await db.Banner.findAll({
         order : [
             ['id', 'ASC']
@@ -66,20 +68,32 @@ app.get("/", async (req, res)  =>{
     })
 })
 
+
+
 app.get("/partidos/fecha", async (req,res) => {
 
+    
+    const idApuesta = new Date().getTime()
+
+    console.log("ID", idApuesta)
+
+    const pasadoManana = new Date().getTime() + (86400000 * 2);
+
+
+
     const tablaPartidos = await db.Partida.findAll({
+
 
         order : [
             ['fecha', 'ASC']
         ]
-        /*
+        ,
         where: {
             fecha: {
-              $gte: moment().add(7, 'days').toDate()
+              $lte: pasadoManana
             }
           }
-   */       
+          
     })
 
 
@@ -101,38 +115,56 @@ app.get("/pendiente" , async (req,res) =>{
 
 })
     
+
+
+
 app.get("/partidos" , async (req,res) =>{
 
+
+    //console.log("CATEGORÍA ELEGIDA: ", categoria)
+   
     const tablaPartidos = await db.Partida.findAll({
 
         order : [
             ['fecha', 'DESC']
         ]
+        
     })
 
     
 
-    res.render('hardcode', { datos : tablaPartidos })
+    const tablaCategorias = await db.CategoriaJuego.findAll({
 
-} )
+    })
 
-app.post("/partidos" , (req,res) =>{
+    res.render('hardcode',
+    
+    { datos : tablaPartidos, 
+        categorias : tablaCategorias, //juegos : tablaJuegos
+     })
 
-    const codigo = req.body.codigoelegido
-    const equipo = req.body.equipoelegido
-    const monto = req.body.montoelegido
-    const ganancia = req.body.ganancia_elegida
+    } )
 
-    console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
+    app.post("/partidos" , (req,res) =>{
+    
+        const codigo = req.body.codigoelegido
+        const equipo = req.body.equipoelegido
+        const monto = req.body.montoelegido
+        const ganancia = req.body.ganancia_elegida
+    
+        console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
+    
+        const categoriaElegida = req.body.categoria
+    
+    
+        res.redirect("/partidos")
+    
+    })
 
-    res.redirect("/partidos")
-
-
-})
 
 app.get("/misapuestas", async (req,res) =>{
 
-    
+   
 
     const usuarioApuestas = [
         {
