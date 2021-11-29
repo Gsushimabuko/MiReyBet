@@ -21,13 +21,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       factorA: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       factorB: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       factorE: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       resultado: {
         type: Sequelize.STRING

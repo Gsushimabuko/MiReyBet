@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Partida.belongsTo(models.Juego, {
         foreignKey : 'juego'
       })
-      
+
       Partida.belongsTo(models.EstadoPartida, {
         foreignKey : 'estado'
       })
@@ -25,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     duracion: DataTypes.INTEGER,
     equipoA: DataTypes.STRING,
     equipoB: DataTypes.STRING,
-    factorA: DataTypes.INTEGER,
-    factorB: DataTypes.INTEGER,
-    factorE: DataTypes.INTEGER,
+    factorA: DataTypes.FLOAT,
+    factorB: DataTypes.FLOAT,
+    factorE: DataTypes.FLOAT,
     resultado: DataTypes.STRING
   }, {
     sequelize,
