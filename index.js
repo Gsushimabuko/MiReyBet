@@ -111,7 +111,7 @@ app.get("/pendiente" , async (req,res) =>{
         const tablaPartidos = await db.Partida.findAll({
     
             where : {
-            estado : 'pendiente'
+            estado : '1'
             }
         })
     
@@ -188,14 +188,12 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    //OBTENER DNI
-    req.session.username = '76277680'
     
     //Encontrar tabla usuarios
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
@@ -645,9 +643,9 @@ app.get('/partida/eliminar/:codigo', async (req, res) => {
 })
 
 app.get('/banner/new', async (req, res) => {
-    if (req.session.username=="admin"){
-        res.render('banner_new')
+    if (req.session.username=="admin"){  
         res.sendFile(__dirname + "/views/banner_new.ejs")
+        res.render('banner_new')       
     }
     else{
         res.redirect('/advertencia')
