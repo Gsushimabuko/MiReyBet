@@ -717,6 +717,22 @@ app.get("/advertencia", async (req,res) => {
     res.render('advertencia')
 })
 
+
+app.get("/categoria", async (req,res) => {
+    res.render('categoria')
+})
+
+
+app.get("/categoria_new", async (req,res) => {
+    res.render('categoria_new')
+})
+
+app.get("/categoria_update", async (req,res) => {
+    res.render('categoria_update')
+})
+
+
+
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
 })
