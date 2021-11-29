@@ -1,35 +1,26 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Partida', {
+    await queryInterface.createTable('Apuesta3', {
       id: {
-        allowNull: true,
+        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fecha: {
-        type: Sequelize.DATE
+      codigoPartida: {
+        type: Sequelize.STRING
       },
-      duracion: {
+      equipo: {
+        type: Sequelize.STRING
+      },
+      monto: {
         type: Sequelize.INTEGER
       },
-      equipoA: {
-        type: Sequelize.STRING
-      },
-      equipoB: {
-        type: Sequelize.STRING
-      },
-      factorA: {
+      factor: {
         type: Sequelize.FLOAT
       },
-      factorB: {
-        type: Sequelize.FLOAT
-      },
-      factorE: {
-        type: Sequelize.FLOAT
-      },
-      resultado: {
+      iduUsuario: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -42,7 +33,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => { 
-    await queryInterface.dropTable('Partida');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Apuesta3');
   }
 };

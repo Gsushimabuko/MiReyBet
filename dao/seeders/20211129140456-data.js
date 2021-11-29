@@ -47,6 +47,10 @@ module.exports = {
       {nombre: 'EquipoB', createdAt: new Date(), updatedAt: new Date()},
       {nombre: 'Empate', createdAt: new Date(), updatedAt: new Date()}
     ])
+
+    
+    
+    
   },
 
   down: async (queryInterface, Sequelize) => {

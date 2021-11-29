@@ -20,8 +20,13 @@
         <!-- FILTROS DE BÚSQUEDA-->
         <div class="row mt-4"> 
 
-            
-            <!--<img  class="col-4" src="/assets/imagenes/filter.png" > -->
+            <div class="container-fluid row"> 
+                <div class="ml-4 col-7">
+                    
+                    <a type="submit" href="/partidos/all" size class="btn btn-secondary btn-sm col-sm-3  mt-2 " >Volver al Filtro</a>
+                </div>
+
+            </div>
             
             
             
@@ -41,8 +46,9 @@
                 <div class="col-9"> 
                     <a class=" btn btn-light col-2" id="fecha" href="/partidos/fecha"> Fecha </a>
                     
-                    <a class=" btn btn-light col-2" id="pendientes" href="/partidos"> Pendientes </a>
+                    <a class=" btn btn-light col-2" id="pendientes" href="/partidos/all"> Pendientes </a>
     
+                    
                     <div class="card">
         
                         <div class="card-header">
@@ -187,7 +193,7 @@
                             </div>
         
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-5">
                                     <input id="monto" class="form-control" type="text"  value="0">
                                 </div>
                             </div>
@@ -195,11 +201,12 @@
                             <!--Ganancia  posible -->
         
                             <div class="mt-3">
-                                <b>
+                                <b class="mb-3">
                                     Ganancia posible: 
+
                                 </b>
         
-                                <div >
+                                <div class="col-5">
                                     <input  id="total" name="total" class="form-control" type="text" value="">
         
                                 </div>
