@@ -313,8 +313,7 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 app.get('/mi_cuenta/cerrar', async (req, res)=> {
         req.session.destroy() // Destruyes la sesion
-        const usuario = req.session.username
-        res.render('login' ,{usuario : usuario})
+        res.render('login' ,{usuario : null})
 })
 
 app.get("/reglas", async (req,res) => {
@@ -740,7 +739,20 @@ app.get("/advertencia", async (req,res) => {
 
 
 app.get("/categoria", async (req,res) => {
-    res.render('categoria')
+    if (req.session.username=="admin"){
+        const categoria = await db.CategoriaJuego.findAll({
+                order : [
+                    ['id', 'DESC']
+                ]
+            });
+            res.render('categoria', {
+                categorias : categoria
+            })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+   
 })
 
 
@@ -752,16 +764,66 @@ app.get("/categoria_update", async (req,res) => {
     res.render('categoria_update')
 })
 
-//eliminar  categoria
-app.get('/categoria/eliminar/:codigo', async (req, res) => {
-    const idcategoria = req.params.codigos
-    await db.Categoria.destroy({
+
+
+
+//editar categoria
+app.get('/categoria/modificar/:codigo', async (req, res) => {
+    if (req.session.username=="admin"){
+        const idcategoria = req.params.codigo
+        const categoria = await db.CategoriaJuego.findOne({
+            where : {
+                id : idcategoria
+            }
+        })
+    
+        res.render('categoria_update', {
+          categoria:categoria
+        })
+    }else{
+        res.redirect('/advertencia')
+    }
+})
+
+app.post('/categoria/modificar', async (req, res) => {
+    const idcategoria= req.body.id
+    const nombre =req.body.nombre
+ 
+
+    console.log(categoria)
+
+    const categoria = await db.CategoriaJuego.findOne({
         where : {
             id : idcategoria
         }
     })
+    //2. Cambiar su propiedas / campos
+    categoria.id = id
+    categoria.nombre = nombre
+   
+
+    //3. Guardo/Actualizo en la base de datos
+    await categoria.save()
+
     res.redirect('/categoria')
+
 })
+
+
+
+app.get('/partida/eliminar/:codigo', async (req, res) => {
+    const idPartida = req.params.codigo
+    await db.Partida.destroy({
+        where : {
+            id : idPartida
+        }
+    })
+    res.redirect('/partida')
+})
+
+
+
+
 
 
 

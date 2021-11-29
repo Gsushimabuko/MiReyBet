@@ -11,26 +11,14 @@
         <%- include('menu_admin') %>
         <h2>Edición Categoria</h2>
         <form method="post" action="/categoria/modificar">
-        <input type="hidden" name="id" value="<%= juego.id %>" /> 
+        <input type="hidden" name="id" value="<%= categoria.id %>" /> 
             <div class="mb-2">   
                 <label class="form-label">Nombre:</label>
                 <input name="nombre" type="text" class="form-control" 
                 value="<%= categoria.nombre %>"
                 />
             </div>
-            <div  class="mb-2">
-                <label class="form-label">Tipo Juego:</label>
-                <select name="juegoCategoriaJuegoId" class="form-select">
-                    <option value="-1">----- Seleccione una opción -----</option>
-                    <% categoriaJuego.forEach( (tipo)=> { %>
-                        <% if (tipo.id == juego.categoriaJuegoId)  { %>
-                            <option selected value="<%= tipo.id%>"><%= tipo.nombre %></option>
-                        <% }else { %>
-                            <option value="<%= tipo.id%>"><%= tipo.nombre %></option>
-                        <% } %>
-                    <% }) %>
-                </select>
-            </div  class="mb-2">
+         
             <button type="submit" class="btn btn-success">Guardar</button>
             <a id= "btnRegresar" class="btn btn-primary">Cancelar</a>
         <%- include('footer') %>
