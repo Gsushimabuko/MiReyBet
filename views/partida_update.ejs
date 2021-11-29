@@ -54,6 +54,19 @@
                     <% }) %>
                 </select>
             </div  class="mb-2">
+            <div  class="mb-2">
+                <label class="form-label">Resultado:</label>
+                <select name="partida_resultado" class="form-select">
+                    <option value="-1">----- Seleccione una opción -----</option>
+                    <% resultadoPartida.forEach( (resultado)=> { %>
+                        <% if (resultado.id == partida.resultadoId)  { %>
+                            <option selected value="<%= resultado.id%>"><%= resultado.nombre %></option>
+                        <% }else { %>
+                            <option value="<%= resultado.id%>"><%= resultado.nombre %></option>
+                        <% } %>
+                    <% }) %>
+                </select>
+            </div  class="mb-2">
             <button type="submit" class="btn btn-success">Guardar</button>
             <a id= "btnRegresar" class="btn btn-primary">Cancelar</a>
         <%- include('footer') %>

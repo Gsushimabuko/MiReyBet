@@ -11,13 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Partida.belongsTo(models.Juego, {
+        foreignKey : 'juego'
+      })
+      
+      Partida.belongsTo(models.EstadoPartida, {
+        foreignKey : 'estado'
+      })
     }
   };
   Partida.init({
-    juego: DataTypes.STRING,
     fecha: DataTypes.DATE,
     duracion: DataTypes.INTEGER,
-    estado: DataTypes.STRING,
     equipoA: DataTypes.STRING,
     equipoB: DataTypes.STRING,
     factorA: DataTypes.INTEGER,

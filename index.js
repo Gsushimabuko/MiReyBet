@@ -447,13 +447,15 @@ app.get('/partida', async (req, res)=> {
     
         let nuevaListaPartida = []
         for (let partida of partidas) {
+            const juego = await partida.getJuego()
+            const estado = await partida.getEstadoPartida()
             nuevaListaPartida.push({
                 id : partida.id,
-                juego : partida.juego,
+                juego : juego.nombre,
                 fecha : partida.fecha,
                 equipoA : partida.equipoA,
                 equipoB : partida.equipoB,
-                estado : partida.estado
+                estado : estado.nombre
             })
         }
         console.log("lista", nuevaListaPartida)
@@ -515,11 +517,13 @@ app.get('/partida/modificar/:codigo', async (req, res) => {
     
         const nombreJuego = await db.Juego.findAll()
         const estadosPartida = await db.EstadoPartida.findAll()
+        const resultadoPartida = await db.Resultado.findAll()
     
         res.render('partida_update', {
             partida : partida,
             nombreJuego : nombreJuego,
-            estadosPartida : estadosPartida
+            estadosPartida : estadosPartida,
+            resultadoPartida : resultadoPartida
         })
     }else{
         res.redirect('/advertencia')

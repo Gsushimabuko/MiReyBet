@@ -41,6 +41,12 @@ module.exports = {
       {correo: 'pruebav', pass: 'pruebav', estado: 2,createdAt: new Date(), updatedAt: new Date()},
       {correo: 'pruebas', pass: 'pruebas', estado: 1,createdAt: new Date(), updatedAt: new Date()}
     ]);
+
+    await queryInterface.bulkInsert('Resultado', [
+      {nombre: 'EquipoA', createdAt: new Date(), updatedAt: new Date()},
+      {nombre: 'EquipoB', createdAt: new Date(), updatedAt: new Date()},
+      {nombre: 'Empate', createdAt: new Date(), updatedAt: new Date()}
+    ])
   },
 
   down: async (queryInterface, Sequelize) => {
