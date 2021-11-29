@@ -568,8 +568,8 @@ app.get('/partida/eliminar/:codigo', async (req, res) => {
 
 app.get('/banner/new', async (req, res) => {
     if (req.session.username=="admin"){
-        res.sendFile(__dirname + "/views/banner_new.ejs")
         res.render('banner_new')
+        res.sendFile(__dirname + "/views/banner_new.ejs")
     }
     else{
         res.redirect('/advertencia')
