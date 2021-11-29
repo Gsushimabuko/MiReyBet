@@ -535,6 +535,9 @@ app.post('/partida/modificar', async (req, res) => {
     const fecha = req.body.partida_fecha
     const equipoA = req.body.partida_equipoA
     const equipoB = req.body.partida_equipoB
+    const factorA = req.body.partida_factorA
+    const factorB = req.body.partida_factorB
+    const factorE = req.body.partida_factorE
     const estado = req.body.partida_estado
     const resultado = req.body.partida_resultado
 
@@ -552,6 +555,9 @@ app.post('/partida/modificar', async (req, res) => {
     partida.equipoB = equipoB
     partida.estado = estado
     partida.resultado = resultado
+    partida.factorA = factorA
+    partida.factorB = factorB
+    partida.factorE = factorE
 
     //3. Guardo/Actualizo en la base de datos
     await partida.save()
