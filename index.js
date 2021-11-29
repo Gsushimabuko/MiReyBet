@@ -188,14 +188,12 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    //OBTENER DNI
-    req.session.username = '76277680'
     
     //Encontrar tabla usuarios
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
