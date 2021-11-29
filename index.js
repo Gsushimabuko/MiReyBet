@@ -736,7 +736,20 @@ app.get("/advertencia", async (req,res) => {
 
 
 app.get("/categoria", async (req,res) => {
-    res.render('categoria')
+    if (req.session.username=="admin"){
+        const categoria = await db.CategoriaJuego.findAll({
+                order : [
+                    ['id', 'DESC']
+                ]
+            });
+            res.render('categoria', {
+                categorias : categoria
+            })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+   
 })
 
 
@@ -758,6 +771,9 @@ app.get('/categoria/eliminar/:codigo', async (req, res) => {
     })
     res.redirect('/categoria')
 })
+
+
+
 
 
 
