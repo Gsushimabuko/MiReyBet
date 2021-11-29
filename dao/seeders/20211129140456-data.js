@@ -12,10 +12,7 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('Juego', [
-      {nombre: 'Juego1', createdAt: new Date(), updatedAt: new Date(),categoriaJuegoId: '1'},
-      {nombre: 'Juego2', createdAt: new Date(), updatedAt: new Date(),categoriaJuegoId: '3'}
-    ]);
+    
 
     await queryInterface.bulkInsert('EstadoPartida', [
       {nombre: 'Pendiente', createdAt: new Date(), updatedAt: new Date()},
@@ -29,15 +26,20 @@ module.exports = {
       {nombre: 'Cate3', createdAt: new Date(), updatedAt: new Date()}
     ]);
 
+    await queryInterface.bulkInsert('Juego', [
+      {nombre: 'Juego1', createdAt: new Date(), updatedAt: new Date(),categoriaJuegoId: 1},
+      {nombre: 'Juego2', createdAt: new Date(), updatedAt: new Date(),categoriaJuegoId: 3}
+    ]);
+
     await queryInterface.bulkInsert('Banner', [
-      {nombre: 'Banner1', urlBanner: '/imagenes/banners/1638193227730.png', createdAt: new Date(), updatedAt: new Date()},
-      {nombre: 'Banner2', rlBanner: '/imagenes/banners/1638193274280.webp', createdAt: new Date(), updatedAt: new Date()}
+      {nombre: 'Banner1', urlBanner: '/imagenes/banners/1638193227730.png', estado:1 ,createdAt: new Date(), updatedAt: new Date()},
+      {nombre: 'Banner2', urlBanner: '/imagenes/banners/1638193274280.webp',  estado:1, createdAt: new Date(), updatedAt: new Date()}
     ]);
 
     await queryInterface.bulkInsert('Cuenta', [
-      {correo: 'admin', pass: 'admin', estado: '2',createdAt: new Date(), updatedAt: new Date()},
-      {correo: 'pruebav', pass: 'pruebav', estado: '2',createdAt: new Date(), updatedAt: new Date()},
-      {correo: 'pruebas', pass: 'pruebas', estado: '1',createdAt: new Date(), updatedAt: new Date()},
+      {correo: 'admin', pass: 'admin', estado: 2,createdAt: new Date(), updatedAt: new Date()},
+      {correo: 'pruebav', pass: 'pruebav', estado: 2,createdAt: new Date(), updatedAt: new Date()},
+      {correo: 'pruebas', pass: 'pruebas', estado: 1,createdAt: new Date(), updatedAt: new Date()},
     ]);
   },
 
