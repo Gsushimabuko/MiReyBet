@@ -448,7 +448,7 @@ app.get('/partida', async (req, res)=> {
         for (let partida of partidas) {
             const juego = await partida.getJuego()
             const estado = await partida.getEstadoPartida()
-            nuevaListaPartida.push({
+               nuevaListaPartida.push({
                 id : partida.id,
                 juego : juego.nombre,
                 fecha : partida.fecha,
@@ -516,13 +516,11 @@ app.get('/partida/modificar/:codigo', async (req, res) => {
     
         const nombreJuego = await db.Juego.findAll()
         const estadosPartida = await db.EstadoPartida.findAll()
-        const resultadoPartida = await db.Resultado.findAll()
     
         res.render('partida_update', {
             partida : partida,
             nombreJuego : nombreJuego,
-            estadosPartida : estadosPartida,
-            resultadoPartida : resultadoPartida
+            estadosPartida : estadosPartida
         })
     }else{
         res.redirect('/advertencia')
@@ -790,15 +788,12 @@ app.post('/categoria/modificar', async (req, res) => {
     const nombre =req.body.nombre
  
 
-    console.log(categoria)
-
     const categoria = await db.CategoriaJuego.findOne({
         where : {
             id : idcategoria
         }
     })
     //2. Cambiar su propiedas / campos
-    categoria.id = id
     categoria.nombre = nombre
    
 
@@ -806,13 +801,13 @@ app.post('/categoria/modificar', async (req, res) => {
     await categoria.save()
 
     res.redirect('/categoria')
-
+    
 })
 
 
 
-app.get('/partida/eliminar/:codigo', async (req, res) => {
-    const idPartida = req.params.codigo
+app.get('/categoria/eliminar/:codigo', async (req, res) => {S
+    const idcategoria = req.params.codigo
     await db.Partida.destroy({
         where : {
             id : idPartida
