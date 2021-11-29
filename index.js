@@ -399,6 +399,7 @@ app.post('/juego/modificar', async (req, res) => {
             id : idJuego
         }
     })
+
     //2. Cambiar su propiedas / campos
     juego.nombre = nombre
     juego.categoriaJuegoId = categoriaJuegoId
@@ -731,7 +732,20 @@ app.get("/categoria_update", async (req,res) => {
     res.render('categoria_update')
 })
 
+//eliminar  categoria
+pp.get('/categoria/eliminar/:codigo', async (req, res) => {
+    const idcategoria = req.params.codigos
+    await db.Categoria.destroy({
+        where : {
+            id : idcategoria
+        }
+    })
+    res.redirect('/categoria')
+})
 
+
+
+    
 
 app.listen(PORT, ()=> {
     console.log(`El servidor se inicio correctamente en el puerto ${PORT}`)
