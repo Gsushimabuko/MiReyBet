@@ -111,7 +111,7 @@ app.get("/pendiente" , async (req,res) =>{
         const tablaPartidos = await db.Partida.findAll({
     
             where : {
-            estado : 'pendiente'
+            estado : '1'
             }
         })
     
@@ -188,14 +188,12 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    //OBTENER DNI
-    req.session.username = '76277680'
     
     //Encontrar tabla usuarios
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
@@ -852,23 +850,14 @@ app.get('/categoria/new', async (req, res) => {
 
 app.post('/categoria/new', async (req, res) => {
     
-    const juego = req.body.partida_juego
-    const partida_fecha = req.body.partida_fecha
-    const partida_duracion = req.body.partida_duracion
-    const partida_equipoA = req.body.partida_equipoA
-    const partida_equipoB = req.body.partida_equipoB
-    const partida_estado = req.body.partida_estado
+    const nombre = req.body.nombre
+   
 
-    await db.Partida.create({
-        juego : juego,
-        fecha : partida_fecha,
-        duracion : partida_duracion,
-        equipoA : partida_equipoA,
-        equipoB : partida_equipoB,
-        estado : partida_estado
+    await db.CategoriaJuego.create({
+        nombre : nombre
     })
 
-    res.redirect('/partida')
+    res.redirect('/categoria')
 })
 
 
