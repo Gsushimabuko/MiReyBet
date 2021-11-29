@@ -36,13 +36,36 @@
         <div class="container">
             
             
+            <div>
+
+                <form  method="post" action="/partidos" >
+                    
+                    <label class="form-label">Categoría:</label>
+                    <select name="categoria" class="form-select">
+                        <option value="-1">----- Seleccione una opción -----</option>
+                        <% categorias.forEach( (categoria)=> { %>
+
+                        <option> <%= categoria.nombre %> </option>
+
+                            
+                        <% }) %>
+                    </select>
+
+                    <a type="submit" class="btn btn-secondary btn-lg col-sm-3" >BUSCAR</a>
+
+                </form>
+
+            </div>
             <div class="mt-2 row"> 
                 
                 <div class="col-9"> 
-                    <a class=" btn btn-light col-2" id="fecha" href="/partidos"> Fecha </a>
-                   
-                    <a class=" btn btn-light col-2" id="pendientes" href="/pendiente"> Pendientes </a>
-    
+                    <a class=" btn btn-light col-2" id="fecha" href="/partidos/fecha"> Fecha </a>
+                    
+                    <a class=" btn btn-light col-2" id="/pendiente" href="/pendiente"> Pendientes </a>
+                    
+                    <!-- Cateogoría-->
+
+
                     <div class="card">
         
                         <div class="card-header">

@@ -13,3 +13,8 @@
 .proximos {
     text-align: center;
   }
+
+#nombreseleccion{
+    font-size: medium;
+    color: darkslategray;
+}
