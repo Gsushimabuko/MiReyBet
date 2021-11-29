@@ -313,8 +313,7 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 app.get('/mi_cuenta/cerrar', async (req, res)=> {
         req.session.destroy() // Destruyes la sesion
-        const usuario = req.session.username
-        res.render('login' ,{usuario : usuario})
+        res.render('login' ,{usuario : null})
 })
 
 app.get("/reglas", async (req,res) => {
