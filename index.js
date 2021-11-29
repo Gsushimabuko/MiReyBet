@@ -232,6 +232,9 @@ app.post('/login', async (req, res) => {
             } else if (cuenta.estado==2){
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
+            } else if (cuenta.estado==0){
+                console.log("cuenta inhabilitada")
+                res.redirect("/login?aut=2")           
             }
         }
         else if(cuenta.correo == "pruebas" && cuenta.pass==password){
@@ -242,6 +245,10 @@ app.post('/login', async (req, res) => {
             } else if (cuenta.estado==2){
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
+            }
+            else if (cuenta.estado==0){
+                console.log("cuenta inhabilitada")
+                res.redirect("/login?aut=2")           
             }
         }   
         else{
