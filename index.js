@@ -72,47 +72,44 @@ app.get("/", async (req, res)  =>{
 
 
 app.get("/partidos/fecha", async (req,res) => {
-
+    if (req.session.username!=null){
+        const idApuesta = new Date().getTime()
+        console.log("ID", idApuesta)
+        const pasadoManana = new Date().getTime() + (86400000 * 2);
+        const tablaPartidos = await db.Partida.findAll({
     
-    const idApuesta = new Date().getTime()
+            order : [
+                ['fecha', 'ASC']
+            ]
+            ,
+            where: {
+                fecha: {
+                  $lte: pasadoManana
+                }
+              }          
+        })
+        res.render('fecha_partidos', { datos : tablaPartidos})
 
-    console.log("ID", idApuesta)
-
-    const pasadoManana = new Date().getTime() + (86400000 * 2);
-
-
-
-    const tablaPartidos = await db.Partida.findAll({
-
-
-        order : [
-            ['fecha', 'ASC']
-        ]
-        ,
-        where: {
-            fecha: {
-              $lte: pasadoManana
-            }
-          }
-          
-    })
-
-
-
-    res.render('fecha_partidos', { datos : tablaPartidos})
+    }else{
+        res.redirect('/advertencia')
+    }
 
 })
 
 app.get("/pendiente" , async (req,res) =>{
+    if (req.session.username!=null){
+        const tablaPartidos = await db.Partida.findAll({
+    
+            where : {
+            estado : 'pendiente'
+            }
+        })
+    
+        res.render('pendiente', {datos : tablaPartidos})
 
-    const tablaPartidos = await db.Partida.findAll({
-
-        where : {
-        estado : 'pendiente'
-        }
-    })
-
-    res.render('pendiente', {datos : tablaPartidos})
+    }else{
+        res.redirect('/advertencia')
+    }
 
 })
     
@@ -120,31 +117,28 @@ app.get("/pendiente" , async (req,res) =>{
 
 
 app.get("/partidos" , async (req,res) =>{
-
-
-    //console.log("CATEGORÍA ELEGIDA: ", categoria)
-   
-    const tablaPartidos = await db.Partida.findAll({
-
-        order : [
-            ['fecha', 'DESC']
-        ]
-        
-    })
-
     
-
-    const tablaCategorias = await db.CategoriaJuego.findAll({
-
-    })
-
-    res.render('hardcode',
+    if (req.session.username!=null){
+        const tablaPartidos = await db.Partida.findAll({
     
-    { datos : tablaPartidos, 
-        categorias : tablaCategorias, //juegos : tablaJuegos
-     })
+            order : [
+                ['fecha', 'DESC']
+            ]
+            
+        })
+        const tablaCategorias = await db.CategoriaJuego.findAll({
+        })
+        res.render('hardcode',   
+        { datos : tablaPartidos, 
+            categorias : tablaCategorias, //juegos : tablaJuegos
+         })
+
+    }else{
+        res.redirect('/advertencia')
+    }
 
     } )
+
 
     app.post("/partidos" , (req,res) =>{
     
@@ -162,34 +156,39 @@ app.get("/partidos" , async (req,res) =>{
     
     })
 
-
-app.get("/misapuestas", async (req,res) =>{
-
+    //console.log("CATEGORÍA ELEGIDA: ", categoria)
    
 
-    const usuarioApuestas = [
-        {
-            codigo: 1,
-            id : '110',
-            seleccion: 'Manchester United',
-            monto: 20,
-            ganancia: 22,
-            estado : 1
-        },
-        {
-            codigo: 2,
-            id : '111',
-            seleccion: 'Villareal',
-            monto: 10,
-            ganancia: 90,
-            estado : 0
-        }
-    
-    ]
 
+app.get("/misapuestas", async (req,res) =>{
+    if (req.session.username!=null){
+        const usuarioApuestas = [
+            {
+                codigo: 1,
+                id : '110',
+                seleccion: 'Manchester United',
+                monto: 20,
+                ganancia: 22,
+                estado : 1
+            },
+            {
+                codigo: 2,
+                id : '111',
+                seleccion: 'Villareal',
+                monto: 10,
+                ganancia: 90,
+                estado : 0
+            }
+        
+        ]
     
+        
+    
+        res.render('misapuestas', {apuestas: usuarioApuestas})
 
-    res.render('misapuestas', {apuestas: usuarioApuestas})
+    }else{
+        res.redirect('/advertencia')
+    }
 
 } )
 
@@ -298,6 +297,7 @@ app.get('/mi_cuenta', async (req, res)=> {
 
 })
 
+
 app.get('/mi_cuenta/cerrar', async (req, res)=> {
         req.session.destroy() // Destruyes la sesion
         res.render('login')
@@ -312,7 +312,7 @@ app.get("/TyC", async (req,res) => {
 })
 
 app.get('/juego', async (req, res)=> {
-      
+    if (req.session.username=="admin"){
         const juegos = await db.Juego.findAll({
             order : [
                 ['id', 'DESC']
@@ -333,6 +333,9 @@ app.get('/juego', async (req, res)=> {
         res.render('juego', {
             juegos : nuevaListaJuego
         })
+    }else{
+        res.redirect('/advertencia')
+    }  
 
 })
 
@@ -363,21 +366,25 @@ app.post('/juego/new', async (req, res) => {
 })
 
 app.get('/juego/modificar/:codigo', async (req, res) => {
-    const idJuego = req.params.codigo
+    
+    if (req.session.username=="admin"){
+        const idJuego = req.params.codigo
+        const juego = await db.Juego.findOne({
+            where : {
+                id : idJuego
+            }
+        })
+    
+        const categoriaJuego = await db.CategoriaJuego.findAll()
+        res.render('juego_update', {
+            juego : juego,
+            categoriaJuego : categoriaJuego
+        })
 
-    const juego = await db.Juego.findOne({
-        where : {
-            id : idJuego
-        }
-    })
-
-    const categoriaJuego = await db.CategoriaJuego.findAll()
-
-
-    res.render('juego_update', {
-        juego : juego,
-        categoriaJuego : categoriaJuego
-    })
+    }else{
+        res.redirect('/advertencia')
+    }
+    
 })
 
 app.post('/juego/modificar', async (req, res) => {
@@ -414,29 +421,33 @@ app.get('/juego/eliminar/:codigo', async (req, res) => {
 })
 
 app.get('/partida', async (req, res)=> {
-      
-    const partidas = await db.Partida.findAll({
-        order : [
-            ['fecha', 'ASC']
-        ]
-    });
-
-    let nuevaListaPartida = []
-    for (let partida of partidas) {
-        nuevaListaPartida.push({
-            id : partida.id,
-            juego : partida.juego,
-            fecha : partida.fecha,
-            equipoA : partida.equipoA,
-            equipoB : partida.equipoB,
-            estado : partida.estado
+    if (req.session.username=="admin"){
+        const partidas = await db.Partida.findAll({
+            order : [
+                ['fecha', 'ASC']
+            ]
+        });
+    
+        let nuevaListaPartida = []
+        for (let partida of partidas) {
+            nuevaListaPartida.push({
+                id : partida.id,
+                juego : partida.juego,
+                fecha : partida.fecha,
+                equipoA : partida.equipoA,
+                equipoB : partida.equipoB,
+                estado : partida.estado
+            })
+        }
+        console.log("lista", nuevaListaPartida)
+    
+        res.render('partida', {
+            partidas : nuevaListaPartida
         })
-    }
-    console.log("lista", nuevaListaPartida)
 
-    res.render('partida', {
-        partidas : nuevaListaPartida
-    })
+    }else{
+        res.redirect('/advertencia')
+    }  
 
 })
 
@@ -477,22 +488,25 @@ app.post('/partida/new', async (req, res) => {
 })
 
 app.get('/partida/modificar/:codigo', async (req, res) => {
-    const idPartida = req.params.codigo
-
-    const partida = await db.Partida.findOne({
-        where : {
-            id : idPartida
-        }
-    })
-
-    const nombreJuego = await db.Juego.findAll()
-    const estadosPartida = await db.EstadoPartida.findAll()
-
-    res.render('partida_update', {
-        partida : partida,
-        nombreJuego : nombreJuego,
-        estadosPartida : estadosPartida
-    })
+    if (req.session.username=="admin"){
+        const idPartida = req.params.codigo
+        const partida = await db.Partida.findOne({
+            where : {
+                id : idPartida
+            }
+        })
+    
+        const nombreJuego = await db.Juego.findAll()
+        const estadosPartida = await db.EstadoPartida.findAll()
+    
+        res.render('partida_update', {
+            partida : partida,
+            nombreJuego : nombreJuego,
+            estadosPartida : estadosPartida
+        })
+    }else{
+        res.redirect('/advertencia')
+    }
 })
 
 app.post('/partida/modificar', async (req, res) => {
