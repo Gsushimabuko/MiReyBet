@@ -15,7 +15,7 @@
             <div class="mb-2">   
                 <label class="form-label">Juego:</label>
                 <select name="partida_juego" class="form-select">
-                    <option value="-1">----- Seleccione una opción -----</option>
+                    <option value="<%= partida.juego %>">----- Seleccione una opción -----</option>
                     <% nombreJuego.forEach( (juego)=> { %>
                         <% if (juego.nombre == partida.nombreJuegoId)  { %>
                             <option selected value="<%= juego.id%>"><%= juego.nombre %></option>
@@ -41,10 +41,22 @@
                 <label class="form-label">Equipo B:</label>
                 <input name="partida_equipoB" type="text" class="form-control" value="<%= partida.equipoB %>"/>
             </div>
+            <div>
+                <label class="form-label">Factor A:</label>
+                <input name="partida_factorA" type="text" class="form-control" value="<%= partida.factorA %>"/>
+            </div>
+            <div>
+                <label class="form-label">Factor B:</label>
+                <input name="partida_factorB" type="text" class="form-control" value="<%= partida.factorB %>"/>
+            </div>
+            <div>
+                <label class="form-label">Factor Empate:</label>
+                <input name="partida_factorE" type="text" class="form-control" value="<%= partida.factorE %>"/>
+            </div>
             <div  class="mb-2">
                 <label class="form-label">Estado:</label>
                 <select name="partida_estado" class="form-select">
-                    <option value="-1">----- Seleccione una opción -----</option>
+                    <option value="<%= partida.estado %>">----- Seleccione una opción -----</option>
                     <% estadosPartida.forEach( (estado)=> { %>
                         <% if (estado.id == partida.estadoId)  { %>
                             <option selected value="<%= estado.id%>"><%= estado.nombre %></option>
@@ -57,7 +69,7 @@
             <div  class="mb-2">
                 <label class="form-label">Resultado:</label>
                 <select name="partida_resultado" class="form-select">
-                    <option value="-1">----- Seleccione una opción -----</option>
+                    <option value="<%= partida.resultado %>">----- Seleccione una opción -----</option>
                     <% resultadoPartida.forEach( (resultado)=> { %>
                         <% if (resultado.id == partida.resultadoId)  { %>
                             <option selected value="<%= resultado.id%>"><%= resultado.nombre %></option>
