@@ -18,3 +18,14 @@
     font-size: medium;
     color: darkslategray;
 }
+
+#texto-nombre{
+    font-size: large;
+    color: black;
+    text-align: center;
+
+}
+
+.img-fluid{
+    max-width: 20%
+}
