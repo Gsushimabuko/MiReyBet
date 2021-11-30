@@ -189,12 +189,11 @@ app.post("/partidos" , async (req,res) =>{
    
     
     
-    
     //Encontrar tabla usuarios
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
@@ -643,10 +642,9 @@ app.get('/partida/eliminar/:codigo', async (req, res) => {
     res.redirect('/partida')
 })
 
-app.get('/banner/new', async (req, res) => {
-    if (req.session.username=="admin"){
-        res.render('banner_new')
-        res.sendFile(__dirname + "/views/banner_new.ejs")
+app.get('/banner/new', (req, res) => {
+    if (req.session.username=="admin"){  
+        res.sendFile(__dirname + "/views/banner_new.ejs", res.render('banner_new') )
     }
     else{
         res.redirect('/advertencia')
@@ -834,6 +832,35 @@ app.get("/categoria", async (req,res) => {
 app.get("/categoria_new", async (req,res) => {
     res.render('categoria_new')
 })
+
+app.get('/categoria/new', async (req, res) => {
+    if (req.session.username=="admin"){
+        const nombrecategoria = await db.CategoriaJuego.findAll()
+      
+        res.render('categoria_new', {
+            nombrecategoria : nombrecategoria,
+        })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+    
+})
+
+app.post('/categoria/new', async (req, res) => {
+    
+    const nombre = req.body.nombre
+   
+
+    await db.CategoriaJuego.create({
+        nombre : nombre
+    })
+
+    res.redirect('/categoria')
+})
+
+
+
 
 app.get("/categoria_update", async (req,res) => {
     res.render('categoria_update')
