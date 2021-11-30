@@ -17,18 +17,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/nosotros">Nosotros</a>
                     </li>
+                    <% if(usuario != null) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">
-                        <% if(usuario != null) { %>
-                            Mi Cuenta
-                        <% } else { %>    
-                            Inciar Sesión
-                        <% }  %> 
-                    </a>
-                    </li>
+                        <a class="nav-link" href="/login">Mi Cuenta</a>
+                    </li>  
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="/mi_cuenta/cerrar">Cerrar Sesión</a>
+                    </li>   
+                    <% } else { %> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    </li>  
                     <li class="nav-item">
                         <a class="nav-link" href="/registro_1">Crear Cuenta</a>
                     </li>                   
+                        <% }  %> 
                 </ul>
                 
             </div>
