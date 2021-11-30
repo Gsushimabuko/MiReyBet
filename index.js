@@ -15,21 +15,11 @@ const bcrypt = require('bcrypt')
 //ELIMINAR ARCHIVOS
 const fs = require('fs')
 //PARA SUBIR ARCHIVOS
-const multer = require('multer')
+const fileUpload = require('express-fileupload')
+const path = require('path')
 const mimeTypes = require('mime-types')
 const { where } = require('sequelize/dist')
 const partida = require('./dao/models/partida')
-
-const storageBanner= multer.diskStorage({
-    destination: "assets/imagenes/banners/",
-    filename: function(req,file,cb){
-        cb("",Date.now()+ "." + mimeTypes.extension(file.mimetype))
-    }
-})
-
-const uploadBanner = multer({
-    storage: storageBanner
-})
 
 //PUERTO
 var PORT = process.env.PORT || 8000
@@ -45,6 +35,7 @@ app.use(bodyParser.urlencoded({
 
 //SETENADO TEMPLATES Y VIEWS
 app.use(express.static('assets'))
+app.use(fileUpload())
 app.set('view engine', 'ejs') 
 
 
@@ -54,6 +45,170 @@ app.use(session({
     resave : false,
     saveUninitialized : false
 }))
+
+app.get('/banner/new', (req, res) => {
+    if (req.session.username=="admin"){  
+        res.render("banner_new")
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+})
+
+app.post('/banner/new/upload', async (req, res) => {
+    let banner
+    let uploadPath
+
+    banner = req.files.banner
+
+    let ext = mimeTypes.extension(banner.mimetype)
+    banner.name = Date.now()+ "." + ext
+    
+    uploadPath = "assets/imagenes/banners/" + banner.name
+    const nombre = req.body.nombre
+    const urlDestino = req.body.urlDestino
+
+    banner.mv(uploadPath, async (err) => {
+        if(err) console.log("hubo un error")
+        uploadPath = "/imagenes/banners/" + banner.name
+        await db.Banner.create({       
+            nombre : nombre,
+            urlBanner: uploadPath,
+            urlDestino: urlDestino,
+            estado:1
+        })
+    
+        res.redirect('/banner')
+    })
+})
+
+app.get('/banner', async (req, res)=> {
+    if (req.session.username=="admin"){
+        const banner = await db.Banner.findAll({
+                order : [
+                    ['id', 'DESC']
+                ]
+            });
+            res.render('banner', {
+                banner : banner
+            })
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+})
+
+app.get('/banner/eliminar/:codigo', async (req, res) => {
+    if (req.session.username=="admin"){
+        const idBanner = req.params.codigo
+        const banner = await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+        const path = __dirname +"/assets" + banner.urlBanner  
+        fs.unlink(path, (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })    
+        await db.Banner.destroy({
+            where : {
+                id : idBanner
+            }
+        })
+        res.redirect('/banner')
+    }
+    else{
+        res.redirect('/advertencia')
+    }
+})
+
+app.get('/banner/modificar/:codigo', async (req, res) => {
+    if (req.session.username=="admin"){
+        const idBanner = req.params.codigo
+        const banner = await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+        res.render('banner_update', {
+            banner : banner
+        })    
+    } else{
+        res.redirect('/advertencia')
+    } 
+})
+
+app.post('/banner/modificar/upload', async (req, res) => {
+        const idBanner = req.body.id
+        const nombre = req.body.nombre
+        const urlDestino= req.body.urlDestino
+
+        if(req.body.bannerCheck==null)
+            var estado = 0
+        else{
+            var estado = 1
+        }
+
+        var uploadPath = ""
+        
+        if (req.file == null){
+            uploadPath = req.body.urlAnterior
+        }
+        else{
+            let  newBanner = req.files.banner
+            let ext = mimeTypes.extension(newBanner.mimetype)
+            newBanner.name = Date.now()+ "." + ext 
+            uploadPath = "assets/imagenes/banners/" + newBanner.name
+
+            newBanner.mv(uploadPath, async (err) => {
+                if(err) console.log("hubo un error")
+
+                uploadPath = "/imagenes/banners/" +  newBanner.name
+                
+                const banner= await db.Banner.findOne({
+                    where : {
+                        id : idBanner
+                    }
+                })
+
+                banner.nombre = nombre
+                banner.urlBanner = uploadPath
+                banner.urlDestino = urlDestino
+                banner.estado = estado
+            
+                await banner.save()
+            
+                const path = __dirname +"/assets" + req.body.urlAnterior
+
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                })
+
+                res.redirect('/banner')
+        
+            })
+            
+        }
+
+        const banner= await db.Banner.findOne({
+            where : {
+                id : idBanner
+            }
+        })
+        banner.nombre = nombre
+        banner.urlBanner = uploadPath
+        banner.urlDestino = urlDestino
+        banner.estado = estado
+    
+        await banner.save()
+        res.redirect('/banner')
+}) 
 
 //  ----ENDPOITS---- !!!
 
@@ -642,131 +797,8 @@ app.get('/partida/eliminar/:codigo', async (req, res) => {
     res.redirect('/partida')
 })
 
-app.get('/banner/new', (req, res) => {
-    if (req.session.username=="admin"){  
-        res.sendFile(__dirname + "/views/banner_new.ejs", res.render('banner_new') )
-    }
-    else{
-        res.redirect('/advertencia')
-    }
-    
-})
 
-app.post('/banner/new/upload',uploadBanner.single("banner"), async (req, res) => {
-    const filepath = `/imagenes/banners/${req.file.filename}`
-    const nombre = req.body.nombre
 
-    await db.Banner.create({
-        nombre : nombre,
-        urlBanner: filepath,
-        estado:1
-    })
-
-    res.redirect('/banner')
-})
-
-app.get('/banner', async (req, res)=> {
-    if (req.session.username=="admin"){
-        const banner = await db.Banner.findAll({
-                order : [
-                    ['id', 'DESC']
-                ]
-            });
-            res.render('banner', {
-                banner : banner
-            })
-    }
-    else{
-        res.redirect('/advertencia')
-    }
-})
-
-app.get('/banner/eliminar/:codigo', async (req, res) => {
-    if (req.session.username=="admin"){
-        const idBanner = req.params.codigo
-        const banner = await db.Banner.findOne({
-            where : {
-                id : idBanner
-            }
-        })
-    
-        const path = __dirname +"/assets" + banner.urlBanner
-        
-        fs.unlink(path, (err) => {
-            if (err) {
-                console.error(err)
-                return
-            }
-        })
-    
-        await db.Banner.destroy({
-            where : {
-                id : idBanner
-            }
-        })
-    
-        res.redirect('/banner')
-    }
-    else{
-        res.redirect('/advertencia')
-    }
-})
-
-app.get('/banner/modificar/:codigo', async (req, res) => {
-    if (req.session.username=="admin"){
-        const idBanner = req.params.codigo
-        const banner = await db.Banner.findOne({
-            where : {
-                id : idBanner
-            }
-        })
-        res.render('banner_update', {
-            banner : banner
-        })    
-    } else{
-        res.redirect('/advertencia')
-    } 
-})
-
-app.post('/banner/modificar/upload',uploadBanner.single("banner"), async (req, res) => {
-        const idBanner = req.body.id
-        const nombre = req.body.nombre
-        if(req.body.bannerCheck==null)
-            var estado = 0
-        else{
-            var estado = 1
-        }
-
-        var filepath = ""
-
-        if (req.file == null){
-            filepath = req.body.urlAnterior
-        }
-        else{
-            filepath = `/imagenes/banners/${req.file.filename}`
-            
-            const path = __dirname +"/assets" + req.body.urlAnterior
-            
-            fs.unlink(path, (err) => {
-                if (err) {
-                    console.error(err)
-                    return
-                }
-            })
-        }
-
-        const banner= await db.Banner.findOne({
-            where : {
-                id : idBanner
-            }
-        })
-        banner.nombre = nombre
-        banner.urlBanner = filepath
-        banner.estado = estado
-    
-        await banner.save()
-        res.redirect('/banner')
-})
 
 
 

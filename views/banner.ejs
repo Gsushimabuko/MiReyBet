@@ -17,6 +17,7 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Imagen</th>
+                    <th>Destino</th>
                     <th>Activo</th>
                     <th>Acciones</th>
                 </tr>
@@ -29,6 +30,7 @@
                         <td><img id="banner-lista" class="img-fluid img-thumbnail" src=
                         <%= banner.urlBanner %>
                         /></td>
+                        <td><%= banner.urlDestino %></td>
                         <td><% if(banner.estado == 1) { %>
                             <%= "Sí"%>
                             <% }else{ %>

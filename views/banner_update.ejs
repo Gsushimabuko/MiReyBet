@@ -24,6 +24,12 @@
                 value="<%= banner.nombre %>"
                 />
             </div>
+            <div class ="mb-2"> 
+                <label class="form-label">Url destino:</label>
+                <input name="urlDestino" type="text" class="form-control" 
+                value="<%= banner.urlDestino %>"
+                />
+            </div>
             <div class="form-check form-switch mb-2">
                 <% if(banner.estado == 1) { %>
                         <input class="form-check-input" type="checkbox" name="bannerCheck" id="flexSwitchCheckChecked" value="1" checked>
