@@ -14,9 +14,12 @@
     <body class="container">
         <%- include('menu') %>
         <h2 class="text-center mt-3">Reglas</h2>
-        <div class="row">
-            <!-- Secciones secundarias -->
-            <div class="col">
+
+        <div id = "imagen-nosotros" class="d-flex justify-content-center mt-3">
+              <img id="banner" class="img-fluid" src="/imagenes/reglas.jpg"/>  
+        </div>
+
+        <div class="row mt-3">
                 <p id="texto-nosotros">- La apuesta mínima es de S/2 (PEN) soles o moneda equivalente según tipo de cambio del día.
                     <br>
                     <br>
@@ -41,11 +44,8 @@
                     Ejemplo: Si el cliente realiza una apuesta en los equipos A y B, y estos equipos pagaron 100,000 dólares americanos. Si el mismo cliente hizo otra apuesta en los equipos A, B y C (El equipo C está pagando al día siguiente), entonces los equipos A, B pagarán cuotas de 1.00.
                     El límite de usos por tarjeta de débito o crédito lo determina el sistema en base al comportamiento de cada usuario.
                 </p>
-            </div>
-            <div class="col">
-                <img id="banner" class="img-fluid" src="/imagenes/reglas.jpg"/>
-            </div>
         </div>
+
         <div class="d-flex flex-row-reverse mt-3">
             <a id= "btnRegresar" class="btn btn-primary p-2">Regresar</a>
         </div>

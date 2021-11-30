@@ -14,6 +14,9 @@ module.exports = {
       urlBanner: {
         type: Sequelize.STRING
       },
+      urlDestino: {
+        type: Sequelize.STRING
+      },
       estado: {
         type: Sequelize.INTEGER
       },

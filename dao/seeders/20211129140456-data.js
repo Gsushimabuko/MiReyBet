@@ -32,8 +32,8 @@ module.exports = {
     ]);
 
     await queryInterface.bulkInsert('Banner', [
-      {nombre: 'Banner1', urlBanner: '/imagenes/banners/1638193227730.png', estado:1 ,createdAt: new Date(), updatedAt: new Date()},
-      {nombre: 'Banner2', urlBanner: '/imagenes/banners/1638193274280.webp',  estado:1, createdAt: new Date(), updatedAt: new Date()}
+      {nombre: 'Banner1', urlBanner: '/imagenes/banners/1638285816260.png', urlDestino: '', estado:1 ,createdAt: new Date(), updatedAt: new Date()},
+      {nombre: 'Banner2', urlBanner: '/imagenes/banners/1638285833832.webp', urlDestino: '', estado:1 ,createdAt: new Date(), updatedAt: new Date()}
     ]);
 
     await queryInterface.bulkInsert('Cuenta', [

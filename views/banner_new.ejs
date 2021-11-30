@@ -13,14 +13,18 @@
         <form method="post" action="/banner/new/upload" enctype="multipart/form-data">
                 <div class ="mb-2">
                         <label class="form-label">Subir Banner:</label>
-                        <input name="banner" type="file" class="form-control" />
+                        <input name="banner" type="file" accept="image/*" class="form-control" />
                 </div>
             <div class ="mb-2"> 
                 <label class="form-label">Nombre:</label>
                 <input name="nombre" type="text" class="form-control" />
             </div>
+            <div class ="mb-2"> 
+                <label class="form-label">urlDestino:</label>
+                <input name="urlDestino" type="text" placeholder="Ejemplo: https://mipagina.com" class="form-control" />
+            </div>
             <button type="submit" class="btn btn-success">Guardar</button>
-
+        </form>
         <%- include('footer') %>
     </body>
 </html>
