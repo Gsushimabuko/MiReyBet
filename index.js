@@ -111,7 +111,7 @@ app.get("/pendiente" , async (req,res) =>{
         const tablaPartidos = await db.Partida.findAll({
     
             where : {
-            estado : 'pendiente'
+            estado : '1'
             }
         })
     
@@ -188,8 +188,7 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    //OBTENER DNI
-    req.session.username = '76277680'
+    
     
     //Encontrar tabla usuarios
     const usuarioActivo = await db.Cuenta.findOne({
