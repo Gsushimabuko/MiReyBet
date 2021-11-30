@@ -73,30 +73,39 @@ app.get("/", async (req, res)  =>{
 
 
 app.get("/partidos/fecha", async (req,res) => {
-
+    
+    console.log("USUARIO: ", req.session.username)
     if (req.session.username!=null){
+        
         const idApuesta = new Date().getTime()
-        console.log("ID", idApuesta)
+        
+
         const pasadoManana = new Date().getTime() + (86400000 * 2);
-       
+        
+        
+        console.log("PASADO MAÑANA ", pasadoManana)
+
+        console.log("TS ", idApuesta)
 
 
 
-    const tablaPartidos = await db.Partida.findAll({
+        const tablaPartidos = await db.Partida.findAll({
 
 
-        order : [
-            ['fecha', 'ASC']
-        ]
-        ,
-        where: {
-            fecha: {
-              $lte: pasadoManana
+            order : [
+                ['fecha', 'ASC']
+            ]
+            ,
+            where: {
+                fecha:  '2021-01-12 00:00:00-05'
+                //$lte: pasadoManana
+                
+                
             }
-          }
-          
-    })
-    res.render('fecha_partidos', {datos: tablaPartidos})
+            
+        })
+
+         res.render('fecha_partidos', {datos: tablaPartidos})
 
 
 
@@ -137,24 +146,36 @@ app.get("/partidos/:categoria" , async (req,res) =>{
         ]
         
     })
+    
     if(req.params.categoria != "all"){
         
- 
+
+        //Buscando categoría: 
+       const categoriaJuegoBuscada = await db.CategoriaJuego.findOne({
+            
+            where :{
+                    nombre :  req.params.categoria
+                }
+        })
+
+        console.log("CATEGORÍA BUSCADA: "+ categoriaJuegoBuscada.id)
+
+        
         tablaPartidos = await db.Partida.findAll({
             
             order : [
                 ['fecha', 'DESC']
             ],
-            where: {
-                juego : req.params.categoria
-            }
             
-        })
+            where: {
+                juego: categoriaJuegoBuscada.id
+            
+            }
         
 
+        })
+    
     }
-    
-    
     
     const tablaCategorias = await db.CategoriaJuego.findAll({
         
@@ -190,6 +211,7 @@ app.post("/partidos" , async (req,res) =>{
     
     
     //Encontrar tabla usuarios
+    /*
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
@@ -200,6 +222,8 @@ app.post("/partidos" , async (req,res) =>{
 
     //Seleccionar el id del usuario activo
     console.log("ID USUARIO: "+usuarioActivo.id)
+
+    */
 
     const codigo = req.body.codigoelegido
     const equipo = req.body.equipoelegido
@@ -213,12 +237,13 @@ app.post("/partidos" , async (req,res) =>{
         codigoPartida : codigo,
         equipo : equipo,
         monto: monto,
-        iduUsuario: usuarioActivo.id
+        //iduUsuario: usuarioActivo.id
     })
     
     res.redirect("/partidos/"+select)
     
     })
+
 
 
 app.get("/misapuestas", async (req,res) =>{
