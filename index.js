@@ -514,11 +514,12 @@ app.post('/login', async (req, res) => {
         }
         //Usuario cliente sin encriptacion para pruebas
         else if(cuenta.correo == "pruebav" && cuenta.pass==password){
-            req.session.username = cuenta.correo// guardando variable en sesion       
+            
             if (cuenta.estado==1){
                 console.log("Falta validar")
                 res.redirect("/sin_validar") 
             } else if (cuenta.estado==2){
+                req.session.username = cuenta.correo// guardando variable en sesion
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
             } else if (cuenta.estado==0){
@@ -527,11 +528,11 @@ app.post('/login', async (req, res) => {
             }
         }
         else if(cuenta.correo == "pruebas" && cuenta.pass==password){
-            req.session.username = cuenta.correo// guardando variable en sesion
             if (cuenta.estado==1){
                 console.log("Falta validar")
                 res.redirect("/sin_validar") 
             } else if (cuenta.estado==2){
+                req.session.username = cuenta.correo// guardando variable en sesion
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
             }
@@ -551,7 +552,6 @@ app.post('/login', async (req, res) => {
                     res.redirect('/login?aut=2')
                 }
                 if (res && cuenta.estado==1){
-                    req.session.username = cuenta.correo// guardando variable en sesion
                     console.log("cuenta sin validar")
                     es.redirect("/sin_validar")    
                 }
