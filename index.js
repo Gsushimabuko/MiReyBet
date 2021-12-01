@@ -401,9 +401,7 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    
-    //Encontrar tabla usuarios
-    /*
+   
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
@@ -415,7 +413,7 @@ app.post("/partidos" , async (req,res) =>{
     //Seleccionar el id del usuario activo
     console.log("ID USUARIO: "+usuarioActivo.id)
 
-    */
+    
 
     const codigo = req.body.codigoelegido
     const equipo = req.body.equipoelegido
@@ -424,12 +422,14 @@ app.post("/partidos" , async (req,res) =>{
     
     console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
 
+    const factor = ganancia/monto
     
     await db.Apuesta3.create({
         codigoPartida : codigo,
         equipo : equipo,
         monto: monto,
-        //iduUsuario: usuarioActivo.id
+        factor: factor,
+        iduUsuario: usuarioActivo.id
     })
     
     res.redirect("/partidos/"+select)
@@ -440,13 +440,12 @@ app.post("/partidos" , async (req,res) =>{
 
 app.get("/misapuestas", async (req,res) =>{
 
-    req.session.username = '76277680'
-
+    
     //obtener usuario
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
@@ -456,23 +455,50 @@ app.get("/misapuestas", async (req,res) =>{
     
     console.log("ID USUARIO: " + idUsuarioActivo)
     
-    
+    // Encontrar todas las apuestas del usuario 
     const tablasApuestasUsuario = await db.Apuesta3.findAll({
         where: {
             iduUsuario : idUsuarioActivo
         }
     })
     
-    const users = await sequelize.query("SELECT * FROM `Partida`", { type: QueryTypes.SELECT });
 
-    console.log(users)
-    
-    
+    // Encontrar todas las partidas
+    const tablaPartidas = await db.Partida.findAll({
         
-    
-        res.render('misapuestas', {apuestas: usuarioApuestas})
+    })
 
-    res.render('misapuestas', {apuestasUsuario: tablasApuestasUsuario})
+    var partidas = {}
+
+    tablaPartidas.forEach(partida => {
+
+        partidas[partida.id] = [partida.fecha, partida.equipoA, partida.equipoB, partida.juego, partida.estado, partida.resultado]  
+
+    });
+
+    
+    // Crear tabla joineada
+    
+    const apuestas = []
+    tablasApuestasUsuario.forEach(apuesta => {
+        
+        const apuestaLinea = []
+        apuestaLinea.push(apuesta.id)
+        apuestaLinea.push(apuesta.codigoPartida)
+        apuestaLinea.push(apuesta.equipo)
+        apuestaLinea.push(partidas[apuesta.codigoPartida])
+        apuestaLinea.push(apuesta.factor)
+        apuestaLinea.push(apuesta.monto)
+        
+        
+        
+
+        apuestas.push(apuestaLinea)
+    });
+
+    console.log(apuestas)
+
+    res.render('misapuestas', {apuestasUsuario: apuestas})
 
 } )
 

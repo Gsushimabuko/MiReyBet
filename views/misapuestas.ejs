@@ -36,12 +36,11 @@
     
     
                     <tr>
-                        <th>Código apuesta </th>
-                        <th>Número partida</th>
+                        <th>Código apuesta</th>
+                        <th>Código partida </th>
+                        <th>Juego Tipo</th>
                         <th>Fecha</th>
                         <th>Evento</th>
-                        <th>Categoría</th>
-                        <th>Juego</th>
                         <th>Selección</th>
                         <th>Monto Apostado</th>
                         <th>Factor</th>
@@ -58,9 +57,52 @@
     
                     <% apuestasUsuario.forEach((i) => { %>
 
+                        
                         <tr>
-                            <td><%= i.codigoPartida %></td>
-                            <td><%= i.id %></td>
+                            <% if(i[3] == undefined || i[1] == null) { %>
+                                <td><%= i[0] %> </td> 
+                                <% for (var i = 0; i < 9; i++){ %> 
+                                <td>
+                                     ERROR
+                                </td> 
+                                <% } %> 
+                                <% }else{ %> 
+
+                            <td><%= i[0] %></td>
+                            <td><%= i[1] %></td>
+                            <td><%= i[3][3] %></td>
+                            <td><%= i[3][0] %></td>
+                            <td> 
+                                <%= i[3][1] %>
+                                    vs
+                                <%= i[3][2] %>
+                            </td>
+                            <!-- Selección -->
+                            <td><%= i[2] %></td>
+
+                            <td><%= i[5] %></td>
+                            <td><%= i[4] %></td>
+                            <% if(i[3][4] == 1) { %>
+                            <td>Pendiente</td>
+                            <% }else if(i[3][4] == 2){ %>
+                                <td>Comenzado</td>
+                            <% }else if(i[3][4] == 3){ %>
+                                <td>Finalizado</td>
+                            <% }else{ %>
+                                <td>Suspendida</td>
+                            
+                            <% } %>
+
+                            <% if(i[3][5] == i[2]) { %>
+
+                                <td> Ganada </td>
+
+                            <% }else{ %>
+
+                                <td> - </td>
+                                
+                            <% } %>
+
                             <!-- 
                             <td></td>
                             <td</td>
@@ -81,7 +123,7 @@
                           
                             -->
                         </tr>
-                           
+                        <% } %> 
                         <% }) %>
     
                 </tbody>
