@@ -1,5 +1,5 @@
 //IMPORTS
-
+const { Op } = require("sequelize");
 //EXPRESS
 const express = require('express')
 //BODYPARSER
@@ -252,9 +252,13 @@ app.get("/partidos/fecha", async (req,res) => {
             ]
             ,
             where: {
-                fecha:  '2021-01-12 00:00:00-05'
-                //$lte: pasadoManana
+                fecha:{
+                    
+                    $lte: pasadoManana + '00:00:00-05'
+                    
+                }  
                 
+                //'2021-01-12 00:00:00-05'
                 
             }
             
@@ -316,6 +320,37 @@ app.get("/partidos/:categoria" , async (req,res) =>{
         console.log("CATEGORÍA BUSCADA: "+ categoriaJuegoBuscada.id)
 
         
+        const juegoBuscado = await db.Juego.findAll({
+            
+            where :{
+                    categoriaJuegoId :  categoriaJuegoBuscada.id
+                }
+        })
+        
+        
+        
+        let idElegida = 0
+
+        const idLista = []
+
+        juegoBuscado.forEach(i=> {
+            console.log("Juego BUSCADO: "+ i.nombre)
+            console.log("Juego BUSCADO ID: "+ i.id)
+            console.log("CATEGORIA BUSCADO ID: "+ i.categoriaJuegoId)
+            idElegida = i.id
+            idLista.push(i.id)
+            
+            
+        });
+        
+        
+       
+        console.log("LISTA: ", idLista)
+            
+        
+       
+
+        
         tablaPartidos = await db.Partida.findAll({
             
             order : [
@@ -323,7 +358,9 @@ app.get("/partidos/:categoria" , async (req,res) =>{
             ],
             
             where: {
-                juego: categoriaJuegoBuscada.id
+               juego: {
+                   [Op.in]: idLista
+               }
             
             }
         
