@@ -1,5 +1,5 @@
 //IMPORTS
-
+const { Op } = require("sequelize");
 //EXPRESS
 const express = require('express')
 //BODYPARSER
@@ -252,9 +252,13 @@ app.get("/partidos/fecha", async (req,res) => {
             ]
             ,
             where: {
-                fecha:  '2021-01-12 00:00:00-05'
-                //$lte: pasadoManana
+                fecha:{
+                    
+                    $lte: pasadoManana + '00:00:00-05'
+                    
+                }  
                 
+                //'2021-01-12 00:00:00-05'
                 
             }
             
@@ -316,6 +320,37 @@ app.get("/partidos/:categoria" , async (req,res) =>{
         console.log("CATEGORÍA BUSCADA: "+ categoriaJuegoBuscada.id)
 
         
+        const juegoBuscado = await db.Juego.findAll({
+            
+            where :{
+                    categoriaJuegoId :  categoriaJuegoBuscada.id
+                }
+        })
+        
+        
+        
+        let idElegida = 0
+
+        const idLista = []
+
+        juegoBuscado.forEach(i=> {
+            console.log("Juego BUSCADO: "+ i.nombre)
+            console.log("Juego BUSCADO ID: "+ i.id)
+            console.log("CATEGORIA BUSCADO ID: "+ i.categoriaJuegoId)
+            idElegida = i.id
+            idLista.push(i.id)
+            
+            
+        });
+        
+        
+       
+        console.log("LISTA: ", idLista)
+            
+        
+       
+
+        
         tablaPartidos = await db.Partida.findAll({
             
             order : [
@@ -323,7 +358,9 @@ app.get("/partidos/:categoria" , async (req,res) =>{
             ],
             
             where: {
-                juego: categoriaJuegoBuscada.id
+               juego: {
+                   [Op.in]: idLista
+               }
             
             }
         
@@ -364,9 +401,7 @@ app.post("/partidos" , async (req,res) =>{
     
    
     
-    
-    //Encontrar tabla usuarios
-    /*
+   
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
@@ -378,7 +413,7 @@ app.post("/partidos" , async (req,res) =>{
     //Seleccionar el id del usuario activo
     console.log("ID USUARIO: "+usuarioActivo.id)
 
-    */
+    
 
     const codigo = req.body.codigoelegido
     const equipo = req.body.equipoelegido
@@ -387,12 +422,14 @@ app.post("/partidos" , async (req,res) =>{
     
     console.log("Codigo: ", codigo ,"Equipo: ", equipo, "Monto: ", monto, "Ganancia: ", ganancia)
 
+    const factor = ganancia/monto
     
     await db.Apuesta3.create({
         codigoPartida : codigo,
         equipo : equipo,
         monto: monto,
-        //iduUsuario: usuarioActivo.id
+        factor: factor,
+        iduUsuario: usuarioActivo.id
     })
     
     res.redirect("/partidos/"+select)
@@ -403,13 +440,12 @@ app.post("/partidos" , async (req,res) =>{
 
 app.get("/misapuestas", async (req,res) =>{
 
-    req.session.username = '76277680'
-
+    
     //obtener usuario
     const usuarioActivo = await db.Cuenta.findOne({
     
         where : {
-           dni : req.session.username
+           correo : req.session.username
         }
     
     })
@@ -419,23 +455,50 @@ app.get("/misapuestas", async (req,res) =>{
     
     console.log("ID USUARIO: " + idUsuarioActivo)
     
-    
+    // Encontrar todas las apuestas del usuario 
     const tablasApuestasUsuario = await db.Apuesta3.findAll({
         where: {
             iduUsuario : idUsuarioActivo
         }
     })
     
-    const users = await sequelize.query("SELECT * FROM `Partida`", { type: QueryTypes.SELECT });
 
-    console.log(users)
-    
-    
+    // Encontrar todas las partidas
+    const tablaPartidas = await db.Partida.findAll({
         
-    
-        res.render('misapuestas', {apuestas: usuarioApuestas})
+    })
 
-    res.render('misapuestas', {apuestasUsuario: tablasApuestasUsuario})
+    var partidas = {}
+
+    tablaPartidas.forEach(partida => {
+
+        partidas[partida.id] = [partida.fecha, partida.equipoA, partida.equipoB, partida.juego, partida.estado, partida.resultado]  
+
+    });
+
+    
+    // Crear tabla joineada
+    
+    const apuestas = []
+    tablasApuestasUsuario.forEach(apuesta => {
+        
+        const apuestaLinea = []
+        apuestaLinea.push(apuesta.id)
+        apuestaLinea.push(apuesta.codigoPartida)
+        apuestaLinea.push(apuesta.equipo)
+        apuestaLinea.push(partidas[apuesta.codigoPartida])
+        apuestaLinea.push(apuesta.factor)
+        apuestaLinea.push(apuesta.monto)
+        
+        
+        
+
+        apuestas.push(apuestaLinea)
+    });
+
+    console.log(apuestas)
+
+    res.render('misapuestas', {apuestasUsuario: apuestas})
 
 } )
 
@@ -477,11 +540,12 @@ app.post('/login', async (req, res) => {
         }
         //Usuario cliente sin encriptacion para pruebas
         else if(cuenta.correo == "pruebav" && cuenta.pass==password){
-            req.session.username = cuenta.correo// guardando variable en sesion       
+            
             if (cuenta.estado==1){
                 console.log("Falta validar")
                 res.redirect("/sin_validar") 
             } else if (cuenta.estado==2){
+                req.session.username = cuenta.correo// guardando variable en sesion
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
             } else if (cuenta.estado==0){
@@ -490,11 +554,11 @@ app.post('/login', async (req, res) => {
             }
         }
         else if(cuenta.correo == "pruebas" && cuenta.pass==password){
-            req.session.username = cuenta.correo// guardando variable en sesion
             if (cuenta.estado==1){
                 console.log("Falta validar")
                 res.redirect("/sin_validar") 
             } else if (cuenta.estado==2){
+                req.session.username = cuenta.correo// guardando variable en sesion
                 console.log("Ingreso de prueba")
                 res.redirect("/mi_cuenta")           
             }
@@ -514,7 +578,6 @@ app.post('/login', async (req, res) => {
                     res.redirect('/login?aut=2')
                 }
                 if (res && cuenta.estado==1){
-                    req.session.username = cuenta.correo// guardando variable en sesion
                     console.log("cuenta sin validar")
                     es.redirect("/sin_validar")    
                 }
@@ -831,9 +894,20 @@ app.get("/registro_1", (req,res) => {
     res.render('registro_1')
 })
 
+
+
+
+
+
+
+
+
 app.get("/registro_2", (req,res) => {
     res.render('registro_2')
 })
+
+
+
 
 
 
@@ -843,14 +917,22 @@ app.get("/registro_3", (req,res) => {
 
 
 
+
+
+
 app.get("/registro_4", (req,res) => {
     res.render('registro_4')
 })
 
 
+
+
 app.get("/registro_5", (req,res) => {
     res.render('registro_5')
 })
+
+
+
 
 
 app.get("/registro_exitoso", (req,res) => {

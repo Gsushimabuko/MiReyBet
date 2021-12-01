@@ -7,18 +7,23 @@ let vacio = false
 
 const inputTotal = document.getElementById("total")
 const longitud = document.getElementById("tabla").childElementCount
-const inicio = 1
+
 
 
 
 
 const obtenerFactores = () =>{
 
-    for (let i = inicio; i < inicio+longitud; i++) {
+    for (let i = 0; i < longitud; i++) {
+        
+        console.log("I FOR: ", i)
+        const idFila = document.getElementById("tabla").children[i].id
 
-        const butlocal = document.getElementById("butlocal" + i)
-        const butvisita = document.getElementById("butvisita" + i)
-        const butempate = document.getElementById("butempate" + i)
+        console.log("ID FILA: ", idFila)
+
+        const butlocal = document.getElementById("butlocal" + idFila)
+        const butvisita = document.getElementById("butvisita" + idFila)
+        const butempate = document.getElementById("butempate" + idFila)
         
 
         butlocal.onclick = () =>{
@@ -31,9 +36,12 @@ const obtenerFactores = () =>{
                 butlocal.setAttribute("class", "seleccion")
             }
 
-            const factorlocal = butlocal.innerText
-            crearCartilla(factorlocal,butlocal.id,i)
+            console.log("AGREGANDO DATOS: ", butlocal)
             
+            const factorlocal = butlocal.innerText
+            crearCartilla(factorlocal,butlocal.id,idFila)
+            
+            console.log("AGREGADOS: ", factorlocal, butlocal.id, idFila)
             
             
         }
@@ -49,7 +57,7 @@ const obtenerFactores = () =>{
             }
             
             const factorempate = butempate.innerText
-            crearCartilla(factorempate,butempate.id,i)
+            crearCartilla(factorempate,butempate.id,idFila)
             
         }
         
@@ -63,7 +71,7 @@ const obtenerFactores = () =>{
                 butvisita.setAttribute("class", "seleccion")
             }
             const factorvisita = butvisita.innerText
-            crearCartilla(factorvisita,butvisita.id,i)
+            crearCartilla(factorvisita,butvisita.id,idFila)
             
             
             
