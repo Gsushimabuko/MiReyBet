@@ -216,7 +216,7 @@ app.get("/", async (req, res)  =>{
     const usuario = req.session.username
     const banner = await db.Banner.findAll({
         order : [
-            ['id', 'ASC']
+            ['id', 'DESC']
         ]
     });
     res.render('index', {
