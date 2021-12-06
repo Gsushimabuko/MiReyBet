@@ -1,0 +1,13 @@
+<% users.forEach( function(s) { %>
+<tr>
+  <td><%= s.nombre %></td>
+  <td><%= s.apellido %></td>
+  <td><%= s.dni %></td>
+  <td><%= s.correo %></td>
+  <td><%= s.telefono %></td>
+  <td><%= s.distrito %></td>
+  <td><%= s.provincia %></td>
+  <td><%= s.departamento %></td>
+  <td><%= s.pep ? "Si" : "No" %></td>
+</tr>
+<% })
