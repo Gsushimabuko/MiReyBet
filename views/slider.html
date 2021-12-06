@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="slider.css">
+</head>
+<body>
+    <div class="container">
+        <div class="slider">
+          <i class="fa fa-chevron-right fa-2x next-slide" id="next-slide"></i>	
+          <i class="fa fa-chevron-left fa-2x prev-slide" id="prev-slide"></i>
+          
+          <div class="slider-screen" id="slider-screen">
+            <div class="slider-img active" id="slider-img" data-img="1">
+              <img src="1.jpg" alt="01" />			
+            </div>
+            <div class="slider-img" id="slider-img" data-img="2">
+              <img src="2.jpg" alt="02" />			
+            </div>
+            <div class="slider-img" id="slider-img" data-img="3">
+              <img src="3.jpg" alt="03" />			
+            </div>
+          </div>
+          <ul class="bullets">
+              <li class="active" data-bull="1"></li>
+              <li data-bull="2"></li>
+              <li data-bull="3"></li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="slider.js"></script>
+</html>
+
