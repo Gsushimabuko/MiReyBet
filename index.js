@@ -12,6 +12,13 @@ const { application } = require('express')
 //PARA ENCRIPTAR
 const bcrypt = require('bcrypt')
 
+const accountSid = 'ACffb76ebd8258ecff9c6f73c5aae03559'; 
+const authToken = 'd2a7710820b54fc469a4f44f0457dfb8'; 
+
+const mensajeria = require('twilio')(accountSid,authToken);
+
+
+
 //ELIMINAR ARCHIVOS
 const fs = require('fs')
 //PARA SUBIR ARCHIVOS
@@ -519,6 +526,16 @@ app.get('/nosotros', (req, res)=> {
     const usuario = req.session.username
         res.render('nosotros',
         {usuario: usuario})
+
+   
+    mensajeria.messages 
+      .create({ 
+         body: 'HOLA! SÁCATE TU PRUEBA',  
+         messagingServiceSid: 'MG06ac83e44d1d1acf70e08f19c531051a',      
+         to: '+51980590096' 
+       }) 
+      .then(message => console.log(message.sid)) 
+      .done();
 })
 
 app.post('/login', async (req, res) => {
