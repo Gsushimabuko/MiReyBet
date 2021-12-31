@@ -911,9 +911,20 @@ app.get("/registro_1", (req,res) => {
     res.render('registro_1')
 })
 
+
+
+
+
+
+
+
+
 app.get("/registro_2", (req,res) => {
     res.render('registro_2')
 })
+
+
+
 
 
 
@@ -923,14 +934,22 @@ app.get("/registro_3", (req,res) => {
 
 
 
+
+
+
 app.get("/registro_4", (req,res) => {
     res.render('registro_4')
 })
 
 
+
+
 app.get("/registro_5", (req,res) => {
     res.render('registro_5')
 })
+
+
+
 
 
 app.get("/registro_exitoso", (req,res) => {
